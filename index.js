@@ -9,6 +9,7 @@ disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
 const botapproverroleid = "your_role_id_here"
+require("dotenv").config()
 var defaultPrefix = 'your_prefix_here';
 
 client.on("ready", () => {
