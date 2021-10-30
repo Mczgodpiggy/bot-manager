@@ -8,8 +8,8 @@ const disbut = require("discord-buttons")
 disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
-const botapproverroleid = "880011974027669534"
-var defaultPrefix = 'd.';
+const botapproverroleid = "your_role_id_here"
+var defaultPrefix = 'your_prefix_here';
 
 client.on("ready", () => {
   console.log(client.user.tag)
