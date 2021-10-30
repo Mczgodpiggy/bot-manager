@@ -8,6 +8,7 @@ const disbut = require("discord-buttons")
 disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
+const botapproverroleid = "880011974027669534"
 var defaultPrefix = 'd.';
 
 client.on("ready", () => {
@@ -61,10 +62,10 @@ client.on("message", async message => {
           .addField("prefix", `${prefix}`)
           .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${botid}&permissions=0&scope=bot%20applications.commands)`)
         message.lineReply("your bot has been submited to the queue please wait till other staffs review it")
-        channel.send("<@&880011974027669534>", { embed: botembed }).then((msg) => msg.react("<a:check:850724870282674189>"))
+        channel.send(`${botapproverroleid}`, { embed: botembed }).then((msg) => msg.react("<a:check:850724870282674189>"))
       }).catch(err => console.log(err))
   } else if (message.content.startsWith(guildPrefix + "reject") || message.content.startsWith(privateprefix + "reject")) {
-    if (!message.member.roles.cache.find(r => r.id === "880011974027669534")) return message.lineReply("you need <@&880011974027669534> role to approve/reject bots")
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const reason = args.slice(2).join(" ")
@@ -96,7 +97,7 @@ client.on("message", async message => {
         user.send(`your bot ${data.username}#${data.discriminator} was rejected by approver ${message.author.tag}`)
       }).catch(err => console.log(err))
   } else if (message.content.startsWith(guildPrefix + "approve") || message.content.startsWith(privateprefix + "approve")) {
-    if (!message.member.roles.cache.find(r => r.id === "880011974027669534")) return message.lineReply("you need <@&880011974027669534> role to approve/reject bots")
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need ${botapproverroleid} role to approve/reject bots`)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const ownerid = db.get(`newbot${botid}`)
@@ -182,7 +183,7 @@ client.on("message", async message => {
         }
         message.channel.send(embed, addbot);
       } else if (message.content.startsWith(guildPrefix + "set-bot-prefix-name") || message.content.startsWith(privateprefix + "set-bot-prefix-name")) {
-        if (!message.member.roles.cache.find(r => r.id === "880011974027669534")) return message.lineReply("you need <@&880011974027669534> role to edit bots")
+        if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to edit bots`)
         const bot = message.mentions.members.last()
         const prefix = args.slice(2).join(" ")
         if (!bot || !bot.user.bot) return message.lineReply("please mention a bot")
@@ -195,7 +196,7 @@ client.on("message", async message => {
         })
         await message.lineReply(`done the prefix bot name for this bot is now set to ${bot.displayName}`)
       } else if (message.content.startsWith(guildPrefix + "setdb") || message.content.startsWith(privateprefix + "setdb")) {
-        if (!message.member.roles.cache.find(r => r.id === "880011974027669534")) return message.lineReply("you need <@&880011974027669534> role to add stuffs to my db")
+        if (!message.member.roles.cache.find(r => r.id === "botapproverroleid")) return message.lineReply(`you need <@&${botapproverroleid}> role to add stuffs to my db`)
         const start = args.slice(1,2).join("")
         const val = args.slice(2,3).join("")
         if (!start) return message.lineReply("please give a value")
