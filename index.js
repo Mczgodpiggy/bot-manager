@@ -12,7 +12,7 @@ const botapproverroleid = "your_role_id_here"
 const dotenv = require("dotenv")
 require("dotenv").config()
 var defaultPrefix = 'your_prefix_here';
-
+const botlogc = "your_bot_logging_channel_id_here"
 client.on("ready", () => {
   console.log(client.user.tag)
   console.log("is ready")
@@ -51,7 +51,7 @@ client.on("message", async message => {
     })
       .then(res => res.json())
       .then(data => {
-        const channel = client.channels.cache.find(c => c.id === "880011300997042209")
+        const channel = client.channels.cache.find(c => c.id === botlogc)
         if (!channel) return console.log("no such channel")
         console.log(data)
         const botembed = new Discord.MessageEmbed()
@@ -82,7 +82,7 @@ client.on("message", async message => {
       .then(res => res.json())
       .then(data => {
         const user = client.users.cache.find(u => u.id === `${db.get(`newbot${botid}`)}`)
-        const channel = client.channels.cache.find(c => c.id === "880011300997042209")
+        const channel = client.channels.cache.find(c => c.id === botlogc)
         if (!channel) return console.log("no such channel")
         db.delete(`newbot${botid}`)
         const botembed = new Discord.MessageEmbed()
@@ -112,7 +112,7 @@ client.on("message", async message => {
       .then(res => res.json())
       .then(async data => {
         const user = client.users.cache.find(u => u.id === `${db.get(`newbot${botid}`)}`)
-        const channel = client.channels.cache.find(c => c.id === "880011300997042209")
+        const channel = client.channels.cache.find(c => c.id === botlogc)
         if (!channel) return console.log("no such channel")
         db.delete(`newbot${botid}`)
         const botembed = new Discord.MessageEmbed()
