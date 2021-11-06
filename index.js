@@ -9,7 +9,7 @@ disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
 const dotenv = require("dotenv")
-require("doenv").config()
+require(doenv).config()
 
 var defaultPrefix = 'd.';
 
