@@ -8,25 +8,27 @@ const disbut = require("discord-buttons")
 disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
-const botapproverroleid = "your_role_id_here"
 const dotenv = require("dotenv")
-require("dotenv").config()
-var defaultPrefix = 'your_prefix_here';
-const botlogc = "your_bot_logging_channel_id_here"
+require("doenv").config()
+
+var defaultPrefix = 'd.';
+
 client.on("ready", () => {
   console.log(client.user.tag)
   console.log("is ready")
 })
 
 client.on("message", async message => {
+  const botapproverroleid = db.get(`approverroleid_${message.guild.id}`)
+  const botlogcid = db.get(`botlogcid_${message.guild.id}`)
   let privateprefix = prefix.getPrefix(message.author.id)
   let guildPrefix = prefix.getPrefix(message.guild.id)
   if (!privateprefix) privateprefix = guildPrefix
   if (!guildPrefix) guildPrefix = defaultPrefix;
 
   let args = message.content.slice(guildPrefix.length || privateprefix.length).split(' ');
-
-  if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix") || message.content.startsWith(guildPrefix + "setpprefix") || message.content.startsWith(privateprefix + "setpprefix")) {
+  if (message.content.startsWith(guildPrefix) && !db.has(`botrole_${message.guild.id}`) && !message.content.startsWith(guildPrefix + "setup")) return message.lineReply("please use d.setup to setup the add bot")
+  if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix")) {
     let newprefix = args.slice(1, 2).join(" ")
     if (!newprefix) return message.lineReply("please give a prefix")
     prefix.setPrefix(newprefix, message.author.id)
@@ -51,7 +53,7 @@ client.on("message", async message => {
     })
       .then(res => res.json())
       .then(data => {
-        const channel = client.channels.cache.find(c => c.id === botlogc)
+        const channel = client.channels.cache.find(c => c.id === botlogcid)
         if (!channel) return console.log("no such channel")
         console.log(data)
         const botembed = new Discord.MessageEmbed()
@@ -64,7 +66,7 @@ client.on("message", async message => {
           .addField("prefix", `${prefix}`)
           .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${botid}&permissions=0&scope=bot%20applications.commands)`)
         message.lineReply("your bot has been submited to the queue please wait till other staffs review it")
-        channel.send(`${botapproverroleid}`, { embed: botembed }).then((msg) => msg.react("<a:check:850724870282674189>"))
+        channel.send(`<@&${botapproverroleid}>`, { embed: botembed }).then((msg) => msg.react("<a:check:850724870282674189>"))
       }).catch(err => console.log(err))
   } else if (message.content.startsWith(guildPrefix + "reject") || message.content.startsWith(privateprefix + "reject")) {
     if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
@@ -82,7 +84,7 @@ client.on("message", async message => {
       .then(res => res.json())
       .then(data => {
         const user = client.users.cache.find(u => u.id === `${db.get(`newbot${botid}`)}`)
-        const channel = client.channels.cache.find(c => c.id === botlogc)
+        const channel = client.channels.cache.find(c => c.id === botlogcid)
         if (!channel) return console.log("no such channel")
         db.delete(`newbot${botid}`)
         const botembed = new Discord.MessageEmbed()
@@ -96,10 +98,10 @@ client.on("message", async message => {
           .addField("bot owner", `<@${ownerid}>`)
         message.lineReply("rejected " + `${data.username}${data.discriminator}`)
         channel.send(`<@${ownerid}> your bot got rejected`, { embed: botembed })
-        user.send(`your bot ${data.username}#${data.discriminator} was rejected by approver ${message.author.tag}`)
+        user.send(`your bot ${data.username}#${data.discriminator} was rejected by approver ${message.author.tag}\nbecause of the reason ${reason}`)
       }).catch(err => console.log(err))
   } else if (message.content.startsWith(guildPrefix + "approve") || message.content.startsWith(privateprefix + "approve")) {
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need ${botapproverroleid} role to approve/reject bots`)
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const ownerid = db.get(`newbot${botid}`)
@@ -112,7 +114,7 @@ client.on("message", async message => {
       .then(res => res.json())
       .then(async data => {
         const user = client.users.cache.find(u => u.id === `${db.get(`newbot${botid}`)}`)
-        const channel = client.channels.cache.find(c => c.id === botlogc)
+        const channel = client.channels.cache.find(c => c.id === botlogcid)
         if (!channel) return console.log("no such channel")
         db.delete(`newbot${botid}`)
         const botembed = new Discord.MessageEmbed()
@@ -125,21 +127,21 @@ client.on("message", async message => {
           .addField("bot owner", `<@${ownerid}>`)
         message.lineReply("approved " + `${data.username}${data.discriminator}`)
         const botuser = message.guild.members.cache.find(u => u.id === botid)
-        const botrole = message.guild.roles.cache.find(r => r.id === "880074575847780412")
+        const botrole = message.guild.roles.cache.find(r => r.id === db.get(`botrole_${message.guild.id}`))
         const developeruser = message.guild.members.cache.find(u => u.id === ownerid)
-        const botdeveloperrole = message.guild.roles.cache.find(r => r.id === "880074333945466930")
+        const botdeveloperrole = message.guild.roles.cache.find(r => r.id === db.get(`developerrole_${message.guild.id}`))
         botuser.roles.add(botrole)
         await developeruser.roles.add(botdeveloperrole).catch(err => {
           message.author.send(`i got some errors doing that error is ${err}`)
         })
         channel.send(`<@${ownerid}> your bot got approved`, { embed: botembed })
-        user.send(`your bot ${data.username}#${data.discriminator} was approver by approver ${message.author.tag}`)
+        user.send(`your bot ${data.username}#${data.discriminator} was approved by approver ${message.author.tag}`)
       }).catch(err => console.log(err))
   } else if (message.content.startsWith(guildPrefix + "help") || message.content.startsWith(privateprefix + "help")) {
         let addbot = new disbut.MessageButton()
         .setStyle('url')
-        .setLabel('add my brother bot 𝔪𝔠𝔷𝔤𝔬𝔡𝔭𝔦𝔤𝔤𝔶.𝓘𝓞 to your servers') 
-        .setURL("https://top.gg/bot/695922492027568176")
+        .setLabel('add me to your servers') 
+        .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
         let embed =  new Discord.MessageEmbed()
           .setTitle('help')
           .setColor('#12d8f3')
@@ -197,14 +199,78 @@ client.on("message", async message => {
           return message.lineReply(`i got some errors doing that the error is ${err}`)
         })
         await message.lineReply(`done the prefix bot name for this bot is now set to ${bot.displayName}`)
-      } else if (message.content.startsWith(guildPrefix + "setdb") || message.content.startsWith(privateprefix + "setdb")) {
-        if (!message.member.roles.cache.find(r => r.id === "botapproverroleid")) return message.lineReply(`you need <@&${botapproverroleid}> role to add stuffs to my db`)
-        const start = args.slice(1,2).join("")
-        const val = args.slice(2,3).join("")
-        if (!start) return message.lineReply("please give a value")
-        if (!val) return message.lineReply("please give a value")
-        await db.set(`${start}`, `${val}`)
-        await message.lineReply(`done now i have added ${start}, ${val} to my db`)
+      } else if (message.content.startsWith(guildPrefix + "setup") || message.content.startsWith(privateprefix + "setup")) {
+        if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply('you don\'t have admin perm to use this command');
+        message.channel.send("please give a role ID for the bot approver role").then(() => {
+    message.channel.awaitMessages(m => m.author.id === message.author.id, {
+					max: 1,
+					time: 30000,
+					errors: ['time']
+				})
+    .then(col => {
+      const msg = col.first().content.toString()
+      if (isNaN(msg)) return message.lineReply("invalid role ID provided")
+      db.set(`approverroleid_${message.guild.id}`, msg)
+      message.lineReply("done now please give a bot logging channel id").then(() => {
+    message.channel.awaitMessages(m => m.author.id === message.author.id, {
+					max: 1,
+					time: 30000,
+					errors: ['time']
+				})
+    .then(col => {
+      const msg = col.first().content.toString()
+      if (isNaN(msg)) return message.lineReply("invalid channel ID provided")
+      db.set(`botlogcid_${message.guild.id}`, msg)
+      message.lineReply("done now please give a role ID for the bot developer role").then(() => {
+    message.channel.awaitMessages(m => m.author.id === message.author.id, {
+					max: 1,
+					time: 30000,
+					errors: ['time']
+				})
+    .then(col => {
+      const msg = col.first().content.toString()
+      if (isNaN(msg)) return message.lineReply("invalid role ID provided")
+      db.set(`developerrole_${message.guild.id}`, msg)
+      message.lineReply("done now please give a role ID for the bot role").then(() => {
+    message.channel.awaitMessages(m => m.author.id === message.author.id, {
+					max: 1,
+					time: 30000,
+					errors: ['time']
+				})
+    .then(col => {
+      const msg = col.first().content.toString()
+      if (isNaN(msg)) return message.lineReply("invalid role ID provided")
+      db.set(`botrole_${message.guild.id}`, msg)
+      message.lineReply("the setup is done")
+      
+    })
+    .catch(err => {
+      message.channel.send("you didn't answer the bot developer role ID in time please try again")
+      console.log(err)
+    })
+    })
+      
+    })
+    .catch(err => {
+      message.channel.send("you didn't answer the bot role ID in time please try again")
+      console.log(err)
+    })
+    })
+      
+    })
+    .catch(err => {
+      message.channel.send("you didn't answer the channel ID in time please try again")
+      console.log(err)
+    })
+    })
+      
+      
+    })
+    .catch(err => {
+      message.channel.send("you didn't answer the bot approver ID in time please try again")
+      console.log(err)
+    })
+    })
       }
 })
 
