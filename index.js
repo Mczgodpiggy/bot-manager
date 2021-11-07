@@ -8,8 +8,6 @@ const disbut = require("discord-buttons")
 disbut(client)
 const fetch = require("node-fetch")
 const commands = require('./help');
-const dotenv = require("dotenv")
-require(dotenv).config()
 
 var defaultPrefix = 'd.';
 
@@ -201,7 +199,7 @@ client.on("message", async message => {
         await message.lineReply(`done the prefix bot name for this bot is now set to ${bot.displayName}`)
       } else if (message.content.startsWith(guildPrefix + "setup") || message.content.startsWith(privateprefix + "setup")) {
         if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply('you don\'t have admin perm to use this command');
-        message.channel.send("please give a role ID for the bot approver role").then(() => {
+        message.channel.send("please give a role ID for the bot approver role\ntype `cancel` to cancel").then(() => {
     message.channel.awaitMessages(m => m.author.id === message.author.id, {
 					max: 1,
 					time: 30000,
@@ -209,9 +207,10 @@ client.on("message", async message => {
 				})
     .then(col => {
       const msg = col.first().content.toString()
+      if (msg.includes("cancel")) return message.lineReply("setup canceled")
       if (isNaN(msg)) return message.lineReply("invalid role ID provided")
       db.set(`approverroleid_${message.guild.id}`, msg)
-      message.lineReply("done now please give a bot logging channel id").then(() => {
+      message.lineReply("done now please give a bot logging channel id\ntype `cancel` to cancel").then(() => {
     message.channel.awaitMessages(m => m.author.id === message.author.id, {
 					max: 1,
 					time: 30000,
@@ -219,9 +218,10 @@ client.on("message", async message => {
 				})
     .then(col => {
       const msg = col.first().content.toString()
+      if (msg.includes("cancel")) return message.lineReply("setup canceled")
       if (isNaN(msg)) return message.lineReply("invalid channel ID provided")
       db.set(`botlogcid_${message.guild.id}`, msg)
-      message.lineReply("done now please give a role ID for the bot developer role").then(() => {
+      message.lineReply("done now please give a role ID for the bot developer role\ntype `cancel` to cancel").then(() => {
     message.channel.awaitMessages(m => m.author.id === message.author.id, {
 					max: 1,
 					time: 30000,
@@ -229,9 +229,10 @@ client.on("message", async message => {
 				})
     .then(col => {
       const msg = col.first().content.toString()
+      if (msg.includes("cancel")) return message.lineReply("setup canceled")
       if (isNaN(msg)) return message.lineReply("invalid role ID provided")
       db.set(`developerrole_${message.guild.id}`, msg)
-      message.lineReply("done now please give a role ID for the bot role").then(() => {
+      message.lineReply("done now please give a role ID for the bot role\ntype `cancel` to cancel").then(() => {
     message.channel.awaitMessages(m => m.author.id === message.author.id, {
 					max: 1,
 					time: 30000,
@@ -239,6 +240,7 @@ client.on("message", async message => {
 				})
     .then(col => {
       const msg = col.first().content.toString()
+      if (msg.includes("cancel")) return message.lineReply("setup canceled")
       if (isNaN(msg)) return message.lineReply("invalid role ID provided")
       db.set(`botrole_${message.guild.id}`, msg)
       message.lineReply("the setup is done")
@@ -274,5 +276,29 @@ client.on("message", async message => {
       }
 })
 
+client.ws.on("INTERACTION_CREATE", async interaction => {
+  const command = interaction.data.name.toLowerCase();
+  const args = interaction.data.options;
+  if (command === "stats") {
+    let serverlist = ''
+    client.guilds.cache.forEach((guild) => {
+      serverlist = serverlist.concat(guild.name + "\n")
+    })
+    const sembed = new Discord.MessageEmbed()
+      .setColor("GOLD")
+      .setTitle(`Server count is ${client.guilds.cache.size} servers`, '')
+      .addField("total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
+      .addField("support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
+      
+      client.api.interactions(interaction.id, interaction.token).callback.post({
+        data: {
+          type: 4,
+          data: {
+            embeds: [sembed]
+          }
+        }
+      })
+  }
+})
 
 client.login(process.env.TOKEN)
