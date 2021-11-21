@@ -56,6 +56,7 @@ client.on("ready", () => {
 
 
 client.on("message", async message => {
+  
   if (message.author.bot) return;
   const botapproverroleid = db.get(`approverroleid_${message.guild.id}`)
   const botlogcid = db.get(`botlogcid_${message.guild.id}`)
@@ -67,14 +68,16 @@ client.on("message", async message => {
   let args = message.content.slice(guildPrefix.length || privateprefix.length).split(' ');
   
   if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix")) {
-    let newprefix = args.slice(1, 2).join(" ")
-    if (!newprefix) return message.lineReply("please give a prefix")
+    var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
+    let newprefix = args.slice(1, 2).join("")
+    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0")) return message.lineReply("please give a prefix in text")
     prefix.setPrefix(newprefix, message.author.id)
     await message.lineReply("done now prefix for you is " + "`" + newprefix + "`")
   } else if (message.content.startsWith(guildPrefix + "setprefix") || message.content.startsWith(privateprefix + "setprefix")) {
+    var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply('you don\'t have admin perm to use this command');
-    let newprefix = args.slice(1, 2).join(" ")
-    if (!newprefix) return message.lineReply("please give a prefix")
+    let newprefix = args.slice(1, 2).join("")
+    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0")) return message.lineReply("please give a prefix in text")
     prefix.setPrefix(newprefix, message.guild.id)
     await message.lineReply("done now prefix for this guild is " + "`" + newprefix + "`")
   } else if (message.content.startsWith(guildPrefix + "addbot") || message.content.startsWith(privateprefix + "addbot")) {
@@ -471,7 +474,7 @@ client.on("message", async message => {
     .addField("Votes This Month", data.monthlyPoints, true)
     .addField("Total Votes", data.points, true)
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
-    .addField("Website", "Coming soon", true)
+    .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
     .addField("**  **", "** **", true)
     .addField("Invite Link", "Invite me [here](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
