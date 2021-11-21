@@ -1,5 +1,5 @@
-# **addbot**
-a bot that allows members to add bots
+# **bot manager**
+a bot that allows members to add bots and manage them very easily
 # **⚠️ made with discord.js version 12 you must use discord.js version 12 for it to work without edit**
 # [support server](https://mczgodpiggyio.addbot.repl.co/dc)
 # how to use me?
