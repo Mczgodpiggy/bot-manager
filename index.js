@@ -68,16 +68,14 @@ client.on("message", async message => {
   let args = message.content.slice(guildPrefix.length || privateprefix.length).split(' ');
   
   if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix")) {
-    var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     let newprefix = args.slice(1, 2).join("")
-    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0")) return message.lineReply("please give a prefix in text")
+    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0") || newprefix.includes("9") || newprefix.includes("@here") || newprefix.includes("@everyone")) return message.lineReply("please give a prefix in text")
     prefix.setPrefix(newprefix, message.author.id)
     await message.lineReply("done now prefix for you is " + "`" + newprefix + "`")
   } else if (message.content.startsWith(guildPrefix + "setprefix") || message.content.startsWith(privateprefix + "setprefix")) {
-    var numbers = ["0", "1", "2", "3", "4", "5", "6", "7", "8", "9"]
     if (!message.member.hasPermission('ADMINISTRATOR')) return message.lineReply('you don\'t have admin perm to use this command');
     let newprefix = args.slice(1, 2).join("")
-    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0")) return message.lineReply("please give a prefix in text")
+    if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0") || newprefix.includes("@here") || newprefix.includes("@everyone")) return message.lineReply("please give a prefix in text")
     prefix.setPrefix(newprefix, message.guild.id)
     await message.lineReply("done now prefix for this guild is " + "`" + newprefix + "`")
   } else if (message.content.startsWith(guildPrefix + "addbot") || message.content.startsWith(privateprefix + "addbot")) {
