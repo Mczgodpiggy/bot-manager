@@ -1,44 +1,59 @@
 const db = require("quick.db")
 module.exports = {
     "help": {
-        description: "help for a command",
+        description: "Help for a command",
         format: "help [command-name]",
-        category: "unity"
+        category: "<a:dh_utility:911867886384078848>Utility"
     },
     "setprefix": {
-        description: "sets the prefix for that guild",
+        description: "Sets the prefix for that guild",
         format: "setprefix <new-prefix-for-guild>",
-        category: "unity"
+        category: `<a:dh_utility:911867886384078848>Utility`
     },
     "setprivateprefix": {
         aliases: ["setpprefix"],
-        description: "sets the prefix for you",
+        description: "Sets the prefix for you",
         format: "setprivateprefix <new-prefix-for-you>",
-        category: "unity"
+        category: `<a:dh_utility:911867886384078848>Utility`
     },
     "setup": {
-        description: "setup the add bot system if you are a server admin",
+        description: "Setup the add bot system if you are a server admin",
         format: "setup",
-        category: "admins"
+        category: "<:dh_admin:911866293416779836>Admins"
     },
     "addbot": {
-        description: "add a bot to this server if the bot get approved",
+        description: "Add a bot to this server if the bot get approved",
         format: "addbot <bot-id> <bot-prefix>",
-        category: "bot adding"
+        category: "<:dh_plus:911868793872076860>Bot adding"
     },
     "approve": {
-        description: "approve a bot if you have the bot approver role",
+        description: "Approve a bot if you have the bot approver role",
         format: "approve <queued-bot-id>",
-        category: "bot managers"
+        category: `<:dh_manage:911867047347126283>Bot Managers`
     },
     "reject": {
-        description: "reject a bot if you have the bot approver role",
+        description: "Reject a bot if you have the bot approver role",
         format: "reject <queued-bot-id>",
-        category: "bot managers"
+        category: `<:dh_manage:911867047347126283>Bot Managers`
     },
     "set-bot-prefix-name": {
-        description: "sets the bots prefix nickname if you have the bot approver role",
+        description: "Sets the bots prefix nickname if you have the bot approver role",
         format: "set-bot-prefix-name <@bot> <prefix>",
-        category: "bot managers"
+        category: `<:dh_manage:911867047347126283>Bot Managers`
     },
+    "support-server": {
+        description: "Sends my support server's invite link",
+        format: "support-server",
+        category: `<:dh_Support:893893781127045202>Support`
+    },
+    "bot-info": {
+        description: "Get a bot's info from top.gg",
+        format: "bot-info <bot_ID or @bot>",
+        category: "<:dh_beta:911865545106817054>Beta"
+    },
+    "info": {
+      description: "Info about me",
+      format: "info",
+      category: "<:dh_beta:911865545106817054>Beta"
+    }
 }
