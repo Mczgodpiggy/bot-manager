@@ -95,7 +95,6 @@ client.on("message", async message => {
       .then(data => {
         const channel = client.channels.cache.find(c => c.id === botlogcid)
         if (!channel) return console.log("no such channel")
-        console.log(data)
         const botembed = new Discord.MessageEmbed()
           .setTitle("new bot request")
           .addField("bot id", `${data.id}`)
@@ -109,7 +108,10 @@ client.on("message", async message => {
         channel.send(`<@&${botapproverroleid}>`, { embed: botembed }
         ).then((msg) => msg.react("<a:check:850724870282674189>"))
         db.set(`newbot${botid}_${message.guild.id}`, message.author.id)
-      }).catch(err => console.log(err))
+      }).catch(err => {
+        console.log(err)
+        message.lineReply(`I got some errors doing that the error is ${err}`)
+        })
   } else if (message.content.startsWith(guildPrefix + "reject") || message.content.startsWith(privateprefix + "reject")) {
     if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
     if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
@@ -142,7 +144,10 @@ client.on("message", async message => {
         message.lineReply("rejected " + `${data.username}#${data.discriminator}`)
         channel.send(`<@${ownerid}> your bot got rejected`, { embed: botembed })
         user.send(`your bot ${data.username}#${data.discriminator} was rejected by approver ${message.author.tag}\nbecause of the reason ${reason}`)
-      }).catch(err => console.log(err))
+      }).catch(err => {
+        console.log(err)
+        message.lineReply(`I got some errors doing that the error is ${err}`)
+        })
   } else if (message.content.startsWith(guildPrefix + "approve") || message.content.startsWith(privateprefix + "approve")) {
     if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
     if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
@@ -180,7 +185,10 @@ client.on("message", async message => {
         })
         channel.send(`<@${ownerid}> your bot got approved`, { embed: botembed })
         user.send(`your bot ${data.username}#${data.discriminator} was approved by approver ${message.author.tag}`)
-      }).catch(err => console.log(err))
+      }).catch(err => {
+        console.log(err)
+        message.lineReply(`I got some errors doing that the error is ${err}`)
+        })
   } else if (message.content.startsWith(guildPrefix + "help") || message.content.startsWith(privateprefix + "help")) {
         let addbot = new disbut.MessageButton()
         .setStyle('url')
@@ -346,7 +354,7 @@ client.on("message", async message => {
       .setURL("https://top.gg/bot/804651902896963584")
     let serverlist = ''
     client.guilds.cache.forEach((guild) => {
-      serverlist = serverlist.concat(`${guild.name} - ${guild.memberCount}\n${guild.id}\n`)
+      serverlist = serverlist.concat(`${guild.name} - ${guild.memberCount}\n`)
     })
     const psembed = new Discord.MessageEmbed()
       .setColor("GOLD")
