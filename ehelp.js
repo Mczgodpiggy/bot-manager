@@ -33,7 +33,7 @@ module.exports = {
     },
     "reject": {
         description: "Reject a bot if you have the bot approver role",
-        format: "reject <queued-bot-id>",
+        format: "reject <queued-bot-id> <reason>",
         category: `<:dh_manage:911867047347126283>Bot Managers`
     },
     "set-bot-prefix-name": {

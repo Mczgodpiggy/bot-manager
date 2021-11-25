@@ -8,7 +8,7 @@ const disbut = require("discord-buttons")
 disbut(client)
 const fetch = require("node-fetch")
 const ecommands = require('./ehelp');
-
+const ccommands = require("./chelp")
 var defaultPrefix = 'd.';
 const { AutoPoster } = require('topgg-autoposter')
 
@@ -306,8 +306,8 @@ client.on("message", async message => {
         message.lineReply(`I got some errors doing that the error is ${err}`)
         })
     } else if (language === "chinese") {
-      if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
+      if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const ownerid = db.get(`newbot${botid}_${message.guild.id}`)
@@ -355,7 +355,8 @@ client.on("message", async message => {
     }
   } else if (message.content.startsWith(guildPrefix + "help") || message.content.startsWith(privateprefix + "help")) {
     const language = db.get(`language_${message.author.id}`)
-        let addbot = new disbut.MessageButton()
+    if (language === "english") {
+      let addbot = new disbut.MessageButton()
         .setStyle('url')
         .setLabel('add me to your servers') 
         .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
@@ -403,9 +404,60 @@ client.on("message", async message => {
           }
         }
         message.channel.send(embed, addbot);
+    } else if (language === "chinese") {
+      let addbot = new disbut.MessageButton()
+        .setStyle('url')
+        .setLabel('邀請我')
+        .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+        let embed =  new Discord.MessageEmbed()
+          .setTitle('指令列表')
+          .setColor('#12d8f3')
+          .setFooter(`使用者: ${message.member ? message.member.displayName : message.author.username}`, message.author.displayAvatarURL())
+          .setThumbnail(client.user.displayAvatarURL());
+        if (!args[1])
+          embed
+            .addField("符號", "<> 需要的\n[] - 不一定要的")
+            .setDescription(Object.keys(ccommands).map(command => `\`${command.padEnd(Object.keys(ccommands).reduce((a, b) => b.length > a.length ? b : a, '').length)}\` <a:arrow:875628899604762624> ${ccommands[command].description}\n類別: ${ccommands[command].category}`).join('\n'));
+        else {
+          if (Object.keys(ccommands).includes(args[1].toLowerCase()) || Object.keys(ccommands).map(c => ccommands[c].aliases || []).flat().includes(args[1].toLowerCase())) {
+            let command = Object.keys(ccommands).includes(args[1].toLowerCase())? args[1].toLowerCase() : Object.keys(ccommands).find(c => ccommands[c].aliases && ccommands[c].aliases.includes(args[1].toLowerCase()));
+            embed
+              .setTitle(`指令 - ${command}`)
+              .addField("符號", "<> 需要的\n[] - 不一定要的")
+            if (ccommands[command].aliases)
+              embed.addField('指令別名', `\`${ccommands[command].aliases.join('`, `')}\``);
+              if (!ccommands[command].category && privateprefix != guildPrefix)
+              embed
+              .addField('指令介紹', ccommands[command].description)
+              .addField('私用前輟', `\`\`\`${privateprefix}${ccommands[command].format}\`\`\``)
+              .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
+              if (!ccommands[command].category && privateprefix == guildPrefix)
+              embed
+              .addField('指令介紹', ccommands[command].description)
+              .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
+              if (privateprefix != guildPrefix)
+            embed
+              .addField('指令介紹', ccommands[command].description)
+              .addField("類別", ccommands[command].category)
+              .addField('私用前輟', `\`\`\`${privateprefix}${ccommands[command].format}\`\`\``)
+              .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
+              if (privateprefix == guildPrefix)
+            embed
+              .addField('指令介紹', ccommands[command].description)
+              .addField("類別", ccommands[command].category)
+              .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
+          } else {
+            embed
+              .setColor('RED')
+              .setDescription('這不是一個正確的指令\n請用其他的指令或空著來看全部的指令');
+          }
+        }
+        message.channel.send(embed, addbot);
+    }
       } else if (message.content.startsWith(guildPrefix + "set-bot-prefix-name") || message.content.startsWith(privateprefix + "set-bot-prefix-name")) {
     const language = db.get(`language_${message.author.id}`)
-        if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
+    if (language === "english") {
+      if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
         if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to edit bots`)
         const bot = message.mentions.members.last()
         const prefix = args.slice(2).join(" ")
@@ -418,6 +470,21 @@ client.on("message", async message => {
           return message.lineReply(`i got some errors doing that the error is ${err}`)
         })
         await message.lineReply(`done the prefix bot name for this bot is now set to ${bot.displayName}`)
+    } else if (language === "chinese") {
+      if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
+        if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
+        const bot = message.mentions.members.last()
+        const prefix = args.slice(2).join(" ")
+        if (!bot || !bot.user.bot) return message.lineReply("please mention a bot")
+        if (!prefix) return message.lineReply("please give a prefix")
+        await bot.setNickname("").catch(err => {
+          return message.lineReply(`i got some errors doing that the error is ${err}`)
+        })
+        await bot.setNickname(prefix + "|" + bot.displayName).catch(err => {
+          return message.lineReply(`我在處理數據時發生了錯誤\n敬請見諒\n數據錯誤: ${err}`)
+        })
+        await message.lineReply(`這台機器人的前輟暱稱現在是${bot.displayName}`)
+    }
       } else if (message.content.startsWith(guildPrefix + "setup") || message.content.startsWith(privateprefix + "setup")) {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
