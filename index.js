@@ -475,10 +475,10 @@ client.on("message", async message => {
         if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
         const bot = message.mentions.members.last()
         const prefix = args.slice(2).join(" ")
-        if (!bot || !bot.user.bot) return message.lineReply("please mention a bot")
-        if (!prefix) return message.lineReply("please give a prefix")
+        if (!bot || !bot.user.bot) return message.lineReply("請mention一台機器人")
+        if (!prefix) return message.lineReply("請給予一個前輟")
         await bot.setNickname("").catch(err => {
-          return message.lineReply(`i got some errors doing that the error is ${err}`)
+          return message.lineReply(`我在處理數據時發生了錯誤\n敬請見諒\n數據錯誤: ${err}`)
         })
         await bot.setNickname(prefix + "|" + bot.displayName).catch(err => {
           return message.lineReply(`我在處理數據時發生了錯誤\n敬請見諒\n數據錯誤: ${err}`)
