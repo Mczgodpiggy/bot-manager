@@ -46,14 +46,19 @@ module.exports = {
         format: "support-server",
         category: `<:dh_Support:893893781127045202>Support`
     },
+    "info": {
+      description: "Info about me",
+      format: "info",
+      category: "<a:dh_info:868436375081467904>Info"
+    },
     "bot-info": {
         description: "Get a bot's info from top.gg",
         format: "bot-info <bot_ID or @bot>",
         category: "<:dh_beta:911865545106817054>Beta"
     },
-    "info": {
-      description: "Info about me",
-      format: "info",
-      category: "<:dh_beta:911865545106817054>Beta"
-    }
+    "set-language": {
+        description: "Sets your language",
+        format: "set-language",
+        category: "<:dh_beta:911865545106817054>Beta"
+    },
 }
