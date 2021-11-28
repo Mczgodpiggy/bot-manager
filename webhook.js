@@ -1,8 +1,13 @@
+const Discord = require("discord.js")
+const client = new Discord.Client()
 const Topgg = require("@top-gg/sdk")
 const express = require("express")
-
+function getRandomInt(max) {
+  return Math.floor(Math.random() * max);
+}
+const portplus = getRandomInt(10)
 const app = express()
-const port = 3000;
+const port = 3000 + portplus;
 
 app.get('/', (req, res) => res.send('https://website.mczgodpiggy.repl.co'));
 

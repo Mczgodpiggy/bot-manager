@@ -1,7 +1,7 @@
 require("./webhook.js")
 const Discord = require("discord.js")
 require("discord-reply")
-const client = new Discord.Client({ shards: "auto" })
+const client = new Discord.Client({ totalShards: 88 })
 const db = require("quick.db")
 const prefix = require("discord-prefix")
 const disbut = require("discord-buttons")
@@ -948,8 +948,8 @@ client.on("message", async message => {
     .addField("使用者數", `${client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}`, true)
     .addField("這個月的投票量", data.monthlyPoints, true)
     .addField("總投票", data.points, true)
-    .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
-    .addField("網站", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
+    .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
+    .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
     .addField("**  **", "** **", true)
     .addField("機器人邀請", "加我[這裡](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
@@ -1016,6 +1016,22 @@ client.on("message", async message => {
 
     })
     }
+  } else if (message.content.startsWith(guildPrefix + "shard-status") || message.content.startsWith(privateprefix + "shard-status")) {
+    const shardc = client.ws.totalShards
+    let values = await client.shard.broadcastEval(`
+    [
+        this.shard.id,
+        this.guilds.size
+    ]
+    `);
+    let status = "";
+    values.forEach((value) => {
+    status += "• SHARD #"+value[0]+" | ServerCount: "+value[1]+"\n";
+    });
+    const embed = new Discord.MessageEmbed()
+    .setTitle(`${client.user.tag} shard status`)
+    .addField("SHARD STATUS", status)
+    message.lineReply(embed)
   }
 })
 
