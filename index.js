@@ -204,6 +204,7 @@ client.on("message", async message => {
           .addField("bot owner", `<@${ownerid}>`)
         message.lineReply("rejected " + `${data.username}#${data.discriminator}`)
         channel.send(`<@${ownerid}> your bot got rejected`, { embed: botembed })
+        db.delete(`newbot${botid}_${message.guild.id}`)
         if (userlang === "chinese") {
           user.send(`你的機器人${data.username}#${data.discriminator}被機器人管理者${message.author.tag}拒絕了\n因為${reason}`)
         } else if (userlang === "english") {
@@ -212,12 +213,13 @@ client.on("message", async message => {
       }).catch(err => {
         console.log(err)
         message.lineReply(`I got some errors doing that the error is ${err}`)
+        db.delete(`newbot${botid}_${message.guild.id}`)
         })
     } else if (language === "chinese") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
     if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
     const botid = args.slice(1, 2).join("")
-    if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
+    if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
     const reason = args.slice(2).join(" ")
     if (!reason) return message.lineReply("請給予拒絕的理由")
     const ownerid = db.get(`newbot${botid}_${message.guild.id}`)
@@ -246,6 +248,7 @@ client.on("message", async message => {
           .addField("bot owner", `<@${ownerid}>`)
         message.lineReply("拒絕了" + `${data.username}#${data.discriminator}`)
         channel.send(`<@${ownerid}> your bot got rejected`, { embed: botembed })
+        db.delete(`newbot${botid}_${message.guild.id}`)
         if (userlang === "chinese") {
           user.send(`你的機器人${data.username}#${data.discriminator}被機器人管理者${message.author.tag}拒絕了\n因為${reason}`)
         } else if (userlang === "english") {
@@ -254,6 +257,7 @@ client.on("message", async message => {
       }).catch(err => {
         console.log(err)
         message.lineReply(`我在處理數據時發生了錯誤\n敬請見諒`)
+        db.delete(`newbot${botid}_${message.guild.id}`)
         })
     }
   } else if (message.content.startsWith(guildPrefix + "approve") || message.content.startsWith(privateprefix + "approve")) {
@@ -304,12 +308,13 @@ client.on("message", async message => {
       }).catch(err => {
         console.log(err)
         message.lineReply(`I got some errors doing that the error is ${err}`)
+        db.delete(`newbot${botid}_${message.guild.id}`)
         })
     } else if (language === "chinese") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
     if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
     const botid = args.slice(1, 2).join("")
-    if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
+    if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
     const ownerid = db.get(`newbot${botid}_${message.guild.id}`)
     if (!ownerid) return message.lineReply("that's not a queued bot")
     await fetch(`https://discord.com/api/v6/users/${botid}`, {
@@ -350,7 +355,8 @@ client.on("message", async message => {
         }
       }).catch(err => {
         console.log(err)
-        message.lineReply(`I got some errors doing that the error is ${err}`)
+        message.lineReply(`我在處理數據時發生了錯誤\n敬請見諒`)
+        db.delete(`newbot${botid}_${message.guild.id}`)
         })
     }
   } else if (message.content.startsWith(guildPrefix + "help") || message.content.startsWith(privateprefix + "help")) {
@@ -751,12 +757,22 @@ client.on("message", async message => {
     message.channel.send(supporte, addbot)
     }
   } else if (message.content.startsWith("<@") && message.content.endsWith("804651902896963584>")) {
-    const prefix = new Discord.MessageEmbed()
+    const language = db.get(`language_${message.author.id}`) 
+    if (language === "english") {
+      const prefix = new Discord.MessageEmbed()
     .setTitle(`Invite me`)
     .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
     .addField("my prefix for this guild is:", `${guildPrefix}`)
     if (privateprefix) prefix.addField("private prefix for you is:", privateprefix)
     message.lineReply(prefix)
+    } else if (language === "chinese") {
+      const prefix = new Discord.MessageEmbed()
+    .setTitle(`邀請我`)
+    .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+    .addField("這個伺服器的前輟是:", `${guildPrefix}`)
+    if (privateprefix) prefix.addField("你的私用前輟是:", privateprefix)
+    message.lineReply(prefix)
+    }
   } else if (message.content.startsWith(guildPrefix + "bot-info") || message.content.startsWith(privateprefix + "bot-info")) {
     const language = db.get(`language_${message.author.id}`)
     const bot = message.mentions.users.last()
@@ -1018,19 +1034,14 @@ client.on("message", async message => {
     }
   } else if (message.content.startsWith(guildPrefix + "shard-status") || message.content.startsWith(privateprefix + "shard-status")) {
     const shardc = client.ws.totalShards
-    let values = await client.shard.broadcastEval(`
-    [
-        this.shard.id,
-        this.guilds.size
-    ]
-    `);
     let status = "";
     values.forEach((value) => {
     status += "• SHARD #"+value[0]+" | ServerCount: "+value[1]+"\n";
     });
     const embed = new Discord.MessageEmbed()
     .setTitle(`${client.user.tag} shard status`)
-    .addField("SHARD STATUS", status)
+    .addField("SHARD COUNT", shardc)
+    .addField("SHARD STATUS", "Coming soon...")
     message.lineReply(embed)
   }
 })
