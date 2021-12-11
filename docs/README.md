@@ -9,9 +9,7 @@ steps
 
 2, in the .env file put this in it TOKEN=your_token_here
 
-3, edit the your_role_id_here to the role id you want
-
-4, run the bot
+3, run the bot
 ```
 very easy right?
 
