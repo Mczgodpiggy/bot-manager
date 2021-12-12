@@ -1,3 +1,4 @@
+const dapi = require("./discord-api.js")
 require("./webhook.js")
 const Discord = require("discord.js")
 require("discord-reply")
@@ -778,10 +779,13 @@ client.on("message", async message => {
     const bot = message.mentions.users.last()
     if (!bot && !args[1]) return message.lineReply("Please mention a bot or give a bot ID")
     if (language === "english") {
+      const list = args.slice(2,3).join("")
+    if (list !== "top.gg" && list !== "discordz.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`")
       if (bot) {
       if (!bot.bot) return message.lineReply("Please mention a bot not a user")
       const botid = bot.id
-      await fetch(`https://top.gg/api/bots/${botid}`, {
+      if (list == "top.gg") {
+        await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
         authorization: process.env.Topggtoken
       }
@@ -813,10 +817,42 @@ client.on("message", async message => {
       }
       message.channel.send(botembed)
     })
+      } else if (list == "discordz.xyz") {
+        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("Sorry the bot is not on discordz.xyz.\nPlease try again!")
+          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
+      .addField("Short Description", data.shortDesc, true)
+      .addField("Prefix", data.prefix, true)
+      .addField("Tags", data.tags, true)
+      .addField("Owners", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("Votes", data.votes, true)
+      .addField("Inivte", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      if (data.support && data.support !== "null") {
+        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "null") {
+       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
+      }
+
+      if (data.serverCount && data.serverCount !== "null") {
+       botembed.addField("Server Count", data.serverCount, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
+      }
     } else {
       const botid = args.slice(1,2).join("")
       if (!botid || isNaN(botid)) return message.lineReply("Please give a bot id")
-      await fetch(`https://top.gg/api/bots/${botid}`, {
+      if (list == "top.gg") {
+        await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
         authorization: process.env.Topggtoken
       }
@@ -848,47 +884,46 @@ client.on("message", async message => {
       }
       message.channel.send(botembed)
     })
+      } else if (list == "discordz.xyz") {
+        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("Sorry the bot is not on discordz.xyz.\nPlease try again!")
+          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
+      .addField("Short Description", data.shortDesc, true)
+      .addField("Prefix", data.prefix, true)
+      .addField("Tags", data.tags, true)
+      .addField("Owners", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("Votes", data.votes, true)
+      .addField("Inivte", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      if (data.support && data.support !== "null") {
+        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "null") {
+       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
+      }
+
+      if (data.serverCount && data.serverCount !== "null") {
+       botembed.addField("Server Count", data.serverCount, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
+      }
     }
     } else if (language === "chinese") {
       if (bot) {
       if (!bot.bot) return message.lineReply("請mention正確的機器人\n像這樣 <@!804651902896963584>")
       const botid = bot.id
-      await fetch(`https://top.gg/api/bots/${botid}`, {
-      headers: {
-        authorization: process.env.Topggtoken
-      }
-    }) 
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) return message.lineReply("那個機器人不再top.gg上\n請試試其他的機器人")
-      const botembed = new Discord.MessageEmbed()
-      .setTitle(`${data.username}#${data.discriminator}的資料`)
-      .addField("簡介", data.shortdesc, true)
-      .addField("前輟", data.prefix, true)
-      .addField("類別", data.tags, true)
-      .addField("擁有者 & 創作者們", data.owners, true)
-      .setThumbnail(`https://cdn.discordapp.com/avatars/${botid}/${data.defAvatar}.webp`)
-      .addField("這個月的投票量", data.monthlyPoints, true)
-      .addField("機器人邀請", `${data.username}#${data.discriminator}的機器人邀請\n[按這裡](${data.invite}`)
-      .addField("總投票", data.points, true)
-      if (data.support && data.support !== "null") {
-        botembed.addField("機器人伺服器", `${data.username}#${data.discriminator}'s support server\n[Click here](https://discord.gg/${data.support})`, true)
-      
-      }
-
-      if (data.website && data.website !== "null") {
-       botembed.addField("網站", `${data.username}#${data.discriminator}'s website\n[Click here](${data.website})`, true) 
-      }
-
-      if (data.server_count && data.server_count !== "null") {
-       botembed.addField("伺服器量", data.server_count, true) 
-      }
-      message.channel.send(botembed)
-    })
-    } else {
-      const botid = args.slice(1,2).join("")
-      if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
-      await fetch(`https://top.gg/api/bots/${botid}`, {
+      const list = args.slice(2,3).join("")
+    if (list !== "top.gg" && list !== "discordz.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`")
+      if (list == "top.gg") {
+        await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
         authorization: process.env.Topggtoken
       }
@@ -907,12 +942,12 @@ client.on("message", async message => {
       .addField("機器人邀請", `${data.username}#${data.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
       .addField("總投票", data.points, true)
       if (data.support && data.support !== "null") {
-        botembed.addField("機器人伺服器", `${data.username}#${data.discriminator}'s support server\n[Click here](https://discord.gg/${data.support})`, true)
+        botembed.addField("機器人援助伺服器", `${data.username}#${data.discriminator}的援助伺服器\n[按這裡](https://discord.gg/${data.support})`, true)
       
       }
 
       if (data.website && data.website !== "null") {
-       botembed.addField("網站", `${data.username}#${data.discriminator}'s website\n[Click here](${data.website})`, true) 
+       botembed.addField("網站", `${data.username}#${data.discriminator}的網站\n[按這裡](${data.website})`, true) 
       }
 
       if (data.server_count && data.server_count !== "null") {
@@ -920,6 +955,104 @@ client.on("message", async message => {
       }
       message.channel.send(botembed)
     })
+      } else if (list == "discordz.xyz") {
+        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("那個機器人不再discordz.xyz上\n請試試其他的機器人")
+          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
+      .addField("簡介", data.shortDesc, true)
+      .addField("前輟", data.prefix, true)
+      .addField("類別", data.tags, true)
+      .addField("擁有者", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("投票量", data.votes, true)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      if (data.support && data.support !== "null") {
+        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "null") {
+       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
+      }
+
+      if (data.serverCount && data.serverCount !== "null") {
+       botembed.addField("伺服器量", data.serverCount, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
+      }
+    } else {
+      const botid = args.slice(1,2).join("")
+      if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
+      if (list == "top.gg") {
+        await fetch(`https://top.gg/api/bots/${botid}`, {
+      headers: {
+        authorization: process.env.Topggtoken
+      }
+    }) 
+    .then(res => res.json())
+    .then(data => {
+      if (data.error) return message.lineReply("那個機器人不再top.gg上\n請試試其他的機器人")
+      const botembed = new Discord.MessageEmbed()
+      .setTitle(`${data.username}#${data.discriminator}的資料`)
+      .addField("簡介", data.shortdesc, true)
+      .addField("前輟", data.prefix, true)
+      .addField("類別", data.tags, true)
+      .addField("擁有者 & 創作者們", data.owners, true)
+      .setThumbnail(`https://cdn.discordapp.com/avatars/${botid}/${data.defAvatar}.webp`)
+      .addField("這個月的投票量", data.monthlyPoints, true)
+      .addField("機器人邀請", `${data.username}#${data.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
+      .addField("總投票", data.points, true)
+      if (data.support && data.support !== "null") {
+        botembed.addField("機器人援助伺服器", `${data.username}#${data.discriminator}的援助伺服器\n[按這裡](https://discord.gg/${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "null") {
+       botembed.addField("網站", `${data.username}#${data.discriminator}的網站\n[按這裡](${data.website})`, true) 
+      }
+
+      if (data.server_count && data.server_count !== "null") {
+       botembed.addField("伺服器量", data.server_count, true) 
+      }
+      message.channel.send(botembed)
+    })
+      } else if (list == "discordz.xyz") {
+        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("那個機器人不再discordz.xyz上\n請試試其他的機器人")
+          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
+      .addField("簡介", data.shortDesc, true)
+      .addField("前輟", data.prefix, true)
+      .addField("類別", data.tags, true)
+      .addField("擁有者", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("投票量", data.votes, true)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      if (data.support && data.support !== "null") {
+        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "null") {
+       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
+      }
+
+      if (data.serverCount && data.serverCount !== "null") {
+       botembed.addField("伺服器量", data.serverCount, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
+      }
     }
     }
   } else if (message.content.startsWith(guildPrefix + "info") || message.content.startsWith(privateprefix + "info")) {
@@ -987,9 +1120,10 @@ client.on("message", async message => {
                     errors: ['time']
                 }) .then(col => {
         const answer = col.first().content.toString()
-        if (answer !== "1" && answer !== "2" && answer !== "cancel") return message.lineReply("please give a valid option from the list above")
+        
+        if (answer !== "1" && answer !== "2" && answer.toLowerCase() !== "cancel") return message.lineReply("please give a valid option from the list above")
 
-        if (answer == "cancel") return message.lineReply("language selection cancelled")
+        if (answer.toLowerCase() == "cancel") return message.lineReply("language selection cancelled")
         if (answer == "1") {
           db.set(`language_${message.author.id}`, "english")
           message.lineReply("Your language has been updated to English")
@@ -1043,6 +1177,59 @@ client.on("message", async message => {
     .addField("SHARD COUNT", shardc)
     .addField("SHARD STATUS", "Coming soon...")
     message.lineReply(embed)
+  } else if (message.content.startsWith(guildPrefix + "eval") || message.content.startsWith(privateprefix + "eval")) {
+    owners = [`599050023669334037`]
+  if (!owners.includes(message.author.id)) return message.lineReply("your not my owner you can't use this command")
+  
+  let msg = message
+  const {
+    MessageEmbed
+  } = require('discord.js')
+  const {
+    inspect
+  } = require('util')
+
+  const embed = new MessageEmbed()
+    .setFooter(msg.author.tag, msg.author.displayAvatarURL({
+      dynamic: true,
+      format: 'png',
+      size: 4096
+    }))
+
+  const query = args.slice(1).join(' ')
+  const code = (lang, code) => (`\`\`\`${lang}\n${String(code).slice(0, 1000) + (code.length >= 1000 ? '...' : '')}\n\`\`\``).replace(client.token, '*'.repeat(client.token.length))
+
+  if (!query) {
+    const embed1 = new MessageEmbed()
+      .setColor(`#f04947`)
+      .setDescription("<a:NO:867066462027907072> **| Please give me something for evaluation!**")
+    return message.channel.send(embed1)
+  }
+  else {
+    try {
+      const evald = eval(query)
+      const res = typeof evald === 'string' ? evald : inspect(evald, {
+        depth: 0
+      })
+
+      embed.addField('Result', code('js', res))
+
+      if (!Boolean(res) || (!Boolean(evald) && evald !== 0)) embed.setColor('RED')
+      else {
+        embed
+          .addField('Type', code('css', typeof evald))
+          .setColor('GREEN')
+      }
+    } catch (error) {
+      embed
+        .addField('Error', code('js', error))
+        .setColor('RED')
+    } finally {
+      msg.channel.send(embed).catch(error => {
+        msg.channel.send(`There was an error while displaying the eval result! ${error.message}`)
+      })
+    }
+  }
   }
 })
 

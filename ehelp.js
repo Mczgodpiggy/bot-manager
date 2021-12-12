@@ -52,8 +52,8 @@ module.exports = {
       category: "<a:dh_info:868436375081467904>Info"
     },
     "bot-info": {
-        description: "Get a bot's info from top.gg",
-        format: "bot-info <bot_ID or @bot>",
+        description: "Get a bot's info any of the supported bot lists",
+        format: "bot-info <bot_ID or @bot> <supported_bot_list_type>",
         category: "<:dh_beta:911865545106817054>Beta"
     },
     "set-language": {

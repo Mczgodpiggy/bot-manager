@@ -53,7 +53,7 @@ module.exports = {
     },
     "bot-info": {
         description: "找一台機器人在top.gg上的資料",
-        format: "bot-info <機器人ID或mention一個機器人>",
+        format: "bot-info <機器人ID或mention一個機器人> <有支援的機器人目錄>",
         category: "<:dh_beta:911865545106817054>測試版"
     },
     "set-language": {
