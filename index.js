@@ -384,7 +384,7 @@ client.on("message", async message => {
               .addField("Symbols", "<> Argument is required\n[] - Argument is optional")
             if (ecommands[command].aliases)
               embed.addField('Command aliases', `\`${ecommands[command].aliases.join('`, `')}\``);
-              if (!ecommands[command].category && privateprefix != guildPrefix)
+              if (!ecommands[command].category && privateprefix !== guildPrefix)
               embed
               .addField('DESCRIPTION', ecommands[command].description)
               .addField('FORMAT-private prefix', `\`\`\`${privateprefix}${ecommands[command].format}\`\`\``)
