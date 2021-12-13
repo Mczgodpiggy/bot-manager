@@ -71,7 +71,7 @@ client.on("message", async message => {
 
   let args = message.content.slice(guildPrefix.length || privateprefix.length).split(' ');
   
-  if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix")) {
+  if (message.content.startsWith(guildPrefix + "setprivateprefix") || message.content.startsWith(privateprefix + "setprivateprefix") || message.content.startsWith(guildPrefix + "setpprefix") || message.content.startsWith(privateprefix + "setpprefix")) {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
     let newprefix = args.slice(1, 2).join("")
@@ -361,6 +361,8 @@ client.on("message", async message => {
         })
     }
   } else if (message.content.startsWith(guildPrefix + "help") || message.content.startsWith(privateprefix + "help")) {
+    let pprefix = prefix.getPrefix(message.author.id)
+    if (!pprefix) pprefix = guildPrefix
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       let addbot = new disbut.MessageButton()
@@ -384,22 +386,22 @@ client.on("message", async message => {
               .addField("Symbols", "<> Argument is required\n[] - Argument is optional")
             if (ecommands[command].aliases)
               embed.addField('Command aliases', `\`${ecommands[command].aliases.join('`, `')}\``);
-              if (!ecommands[command].category && privateprefix !== guildPrefix)
+              if (!ecommands[command].category && pprefix !== guildPrefix)
               embed
               .addField('DESCRIPTION', ecommands[command].description)
-              .addField('FORMAT-private prefix', `\`\`\`${privateprefix}${ecommands[command].format}\`\`\``)
+              .addField('FORMAT-private prefix', `\`\`\`${pprefix}${ecommands[command].format}\`\`\``)
               .addField("FORMAT-guild prefix", `\`\`\`${guildPrefix}${ecommands[command].format}\`\`\``)
-              if (!ecommands[command].category && privateprefix == guildPrefix)
+              if (!ecommands[command].category && pprefix == guildPrefix)
               embed
               .addField('DESCRIPTION', ecommands[command].description)
               .addField("FORMAT-guild prefix", `\`\`\`${guildPrefix}${ecommands[command].format}\`\`\``)
-              if (privateprefix != guildPrefix)
+              if (pprefix !== guildPrefix)
             embed
               .addField('DESCRIPTION', ecommands[command].description)
               .addField("CATEGORY", ecommands[command].category)
-              .addField('FORMAT-private prefix', `\`\`\`${privateprefix}${ecommands[command].format}\`\`\``)
+              .addField('FORMAT-private prefix', `\`\`\`${pprefix}${ecommands[command].format}\`\`\``)
               .addField("FORMAT-guild prefix", `\`\`\`${guildPrefix}${ecommands[command].format}\`\`\``)
-              if (privateprefix == guildPrefix)
+              if (pprefix == guildPrefix)
             embed
               .addField('DESCRIPTION', ecommands[command].description)
               .addField("CATEGORY", ecommands[command].category)
