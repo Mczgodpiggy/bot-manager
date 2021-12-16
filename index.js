@@ -779,7 +779,11 @@ client.on("message", async message => {
   } else if (message.content.startsWith(guildPrefix + "bot-info") || message.content.startsWith(privateprefix + "bot-info")) {
     const language = db.get(`language_${message.author.id}`)
     const bot = message.mentions.users.last()
-    if (!bot && !args[1]) return message.lineReply("Please mention a bot or give a bot ID")
+    if (language === "english") {
+      if (!bot && !args[1]) return message.lineReply("Please mention a bot or give a bot ID")
+    } else if (language === "chinese") {
+      if (!bot && !args[1]) return message.lineReply("請mention正確的機器人或給一個正確的機器人ID")
+    }
     if (language === "english") {
       const list = args.slice(2,3).join("")
     if (list !== "top.gg" && list !== "discordz.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`")

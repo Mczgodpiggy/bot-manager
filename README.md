@@ -5,7 +5,7 @@ a bot that allows members to add bots and manage them very easily
 # how to use me?
 ```
 steps
-1, clone me with git clone github.com/Mczgodpiggy/addbot/ and make a file called .env
+1, clone me with git clone github.com/Mczgodpiggy/bot-manager/ and make a file called .env
 
 2, in the .env file put this in it TOKEN=your_token_here
 
