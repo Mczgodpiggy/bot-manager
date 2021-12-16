@@ -435,7 +435,7 @@ client.on("message", async message => {
               .addField("符號", "<> 需要的\n[] - 不一定要的")
             if (ccommands[command].aliases)
               embed.addField('指令別名', `\`${ccommands[command].aliases.join('`, `')}\``);
-              if (!ccommands[command].category && privateprefix != guildPrefix)
+              if (!ccommands[command].category && pprefix != guildPrefix)
               embed
               .addField('指令介紹', ccommands[command].description)
               .addField('私用前輟', `\`\`\`${privateprefix}${ccommands[command].format}\`\`\``)
@@ -444,7 +444,7 @@ client.on("message", async message => {
               embed
               .addField('指令介紹', ccommands[command].description)
               .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
-              if (privateprefix != guildPrefix)
+              if (pprefix !== guildPrefix)
             embed
               .addField('指令介紹', ccommands[command].description)
               .addField("類別", ccommands[command].category)
