@@ -2,7 +2,7 @@ const dapi = require("./discord-api.js")
 require("./webhook.js")
 const Discord = require("discord.js")
 require("discord-reply")
-const client = new Discord.Client({ totalShards: 88 })
+const client = new Discord.Client()
 const db = require("quick.db")
 const prefix = require("discord-prefix")
 const disbut = require("discord-buttons")
@@ -438,9 +438,9 @@ client.on("message", async message => {
               if (!ccommands[command].category && pprefix != guildPrefix)
               embed
               .addField('指令介紹', ccommands[command].description)
-              .addField('私用前輟', `\`\`\`${privateprefix}${ccommands[command].format}\`\`\``)
+              .addField('私用前輟', `\`\`\`${pprefix}${ccommands[command].format}\`\`\``)
               .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
-              if (!ccommands[command].category && privateprefix == guildPrefix)
+              if (!ccommands[command].category && pprefix == guildPrefix)
               embed
               .addField('指令介紹', ccommands[command].description)
               .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
@@ -448,9 +448,9 @@ client.on("message", async message => {
             embed
               .addField('指令介紹', ccommands[command].description)
               .addField("類別", ccommands[command].category)
-              .addField('私用前輟', `\`\`\`${privateprefix}${ccommands[command].format}\`\`\``)
+              .addField('私用前輟', `\`\`\`${pprefix}${ccommands[command].format}\`\`\``)
               .addField("伺服器前輟", `\`\`\`${guildPrefix}${ccommands[command].format}\`\`\``)
-              if (privateprefix == guildPrefix)
+              if (pprefix == guildPrefix)
             embed
               .addField('指令介紹', ccommands[command].description)
               .addField("類別", ccommands[command].category)
@@ -807,7 +807,7 @@ client.on("message", async message => {
       .addField("Owners", data.owners, true)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${botid}/${data.defAvatar}.webp`)
       .addField("Votes This Month", data.monthlyPoints, true)
-      .addField("Inivte", `Invite link for ${data.username}#${data.discriminator}\n[Click here](${data.invite})`)
+      .addField("Invite", `Invite link for ${data.username}#${data.discriminator}\n[Click here](${data.invite})`)
       .addField("Total Votes", data.points, true)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${data.username}#${data.discriminator}'s support server\n[Click here](https://discord.gg/${data.support})`, true)
@@ -837,7 +837,7 @@ client.on("message", async message => {
       .addField("Owners", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("Votes", data.votes, true)
-      .addField("Inivte", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
       
@@ -874,7 +874,7 @@ client.on("message", async message => {
       .addField("Owners", data.owners, true)
       .setThumbnail(`https://cdn.discordapp.com/avatars/${botid}/${data.defAvatar}.webp`)
       .addField("Votes This Month", data.monthlyPoints, true)
-      .addField("Inivte", `Invite link for ${data.username}#${data.discriminator}\n[Click here](${data.invite})`)
+      .addField("Invite", `Invite link for ${data.username}#${data.discriminator}\n[Click here](${data.invite})`)
       .addField("Total Votes", data.points, true)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${data.username}#${data.discriminator}'s support server\n[Click here](https://discord.gg/${data.support})`, true)
@@ -904,7 +904,7 @@ client.on("message", async message => {
       .addField("Owners", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("Votes", data.votes, true)
-      .addField("Inivte", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
       
