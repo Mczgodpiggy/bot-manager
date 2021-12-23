@@ -21,3 +21,5 @@ if you need any support you can always join our [support server](https://mczgodp
 [<img src="https://user-images.githubusercontent.com/63181866/147093393-99247c1a-0636-4077-8c0d-71d01bf84136.png">](https://top.gg/bot/804651902896963584/vote)
 
 [<img src="https://user-images.githubusercontent.com/63181866/147093393-99247c1a-0636-4077-8c0d-71d01bf84136.png">](https://discordz.xyz/bot/804651902896963584/vote)
+
+[<img src="https://discordz.xyz/api/bot/804651902896963584/widget">](https://discordz.xyz/bot/804651902896963584/)
