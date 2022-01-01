@@ -34,7 +34,23 @@ function dsmbinfo(sid, id){
   }
 }
 
+function dguildinfo(sid){
+  if (sid && !isNaN(sid)) {
+    return fetch(`https://discord.com/api/v6/guilds/${sid}`, {
+      headers: {
+        authorization: `Bot ${process.env.TOKEN}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.message) return data.message
+      return data
+    })
+  } else if (!sid || isNaN(sid)) return "Please give a guild id"
+}
+
 module.exports = {
   duserinfo,
-  dsmbinfo
+  dsmbinfo,
+  dguildinfo
 }

@@ -11,6 +11,8 @@ const fetch = require("node-fetch")
 const ecommands = require('./ehelp');
 const ccommands = require("./chelp")
 var defaultPrefix = 'd.';
+const disbotlist = require("disbotlist");
+const dbl = new disbotlist(process.env.DISBOTTOKEN, client);
 const { AutoPoster } = require('topgg-autoposter')
 
 const ap = AutoPoster(process.env.Topggtoken, client)
@@ -174,7 +176,13 @@ client.on("message", async message => {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
+    const norole = new Discord.MessageEmbed()
+      .setTitle("Missing roles")
+      .setDescription(`You need <@&${botapproverroleid}> role to approve/reject bots`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("Missing roles", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const reason = args.slice(2).join(" ")
@@ -218,7 +226,13 @@ client.on("message", async message => {
         })
     } else if (language === "chinese") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
+    const norole = new Discord.MessageEmbed()
+      .setTitle("你沒有使用這個指令所需的身分組")
+      .setDescription(`你需要<@&${botapproverroleid}> 才能接收/拒絕機器人`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("你沒有使用這個指令所需的身分組", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
     const reason = args.slice(2).join(" ")
@@ -265,7 +279,13 @@ client.on("message", async message => {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to approve/reject bots`)
+      const norole = new Discord.MessageEmbed()
+      .setTitle("Missing roles")
+      .setDescription(`You need <@&${botapproverroleid}> role to approve/reject bots`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("Missing roles", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("please give a bot ID")
     const ownerid = db.get(`newbot${botid}_${message.guild.id}`)
@@ -313,7 +333,13 @@ client.on("message", async message => {
         })
     } else if (language === "chinese") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
-    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
+      const norole = new Discord.MessageEmbed()
+      .setTitle("你沒有使用這個指令所需的身分組")
+      .setDescription(`你需要<@&${botapproverroleid}> 才能接收/拒絕機器人`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("你沒有使用這個指令所需的身分組", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
     const botid = args.slice(1, 2).join("")
     if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
     const ownerid = db.get(`newbot${botid}_${message.guild.id}`)
@@ -467,7 +493,13 @@ client.on("message", async message => {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("Please use d.setup to setup the bot")
-        if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`you need <@&${botapproverroleid}> role to edit bots`)
+        const norole = new Discord.MessageEmbed()
+      .setTitle("Missing roles")
+      .setDescription(`You need <@&${botapproverroleid}> role to the edit bot's prefix name`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("Missing roles", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
         const bot = message.mentions.members.last()
         const prefix = args.slice(2).join(" ")
         if (!bot || !bot.user.bot) return message.lineReply("please mention a bot")
@@ -481,6 +513,13 @@ client.on("message", async message => {
         await message.lineReply(`done the prefix bot name for this bot is now set to ${bot.displayName}`)
     } else if (language === "chinese") {
       if (!db.has(`botrole_${message.guild.id}`)) return message.lineReply("請用d.setup完成設定流程")
+      const norole = new Discord.MessageEmbed()
+      .setTitle("你沒有使用這個指令所需的身分組")
+      .setDescription(`你需要<@&${botapproverroleid}>才能調整機器人的前輟暱稱`)
+      .setColor("FF0F00")
+      .setAuthor(client.user.tag, client.user.displayAvatarURL())
+      .setFooter("你沒有使用這個指令所需的身分組", message.author.displayAvatarURL())
+    if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(norole)
         if (!message.member.roles.cache.find(r => r.id === `${botapproverroleid}`)) return message.lineReply(`你需要<@&${botapproverroleid}>才能接收/拒絕機器人`)
         const bot = message.mentions.members.last()
         const prefix = args.slice(2).join(" ")
@@ -766,14 +805,14 @@ client.on("message", async message => {
     .setTitle(`Invite me`)
     .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
     .addField("my prefix for this guild is:", `${guildPrefix}`)
-    if (privateprefix) prefix.addField("private prefix for you is:", privateprefix)
+    if (privateprefix && privateprefix !== guildPrefix) prefix.addField("private prefix for you is:", privateprefix)
     message.lineReply(prefix)
     } else if (language === "chinese") {
       const prefix = new Discord.MessageEmbed()
     .setTitle(`邀請我`)
     .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
     .addField("這個伺服器的前輟是:", `${guildPrefix}`)
-    if (privateprefix) prefix.addField("你的私用前輟是:", privateprefix)
+    if (privateprefix && privateprefix !== guildPrefix) prefix.addField("你的私用前輟是:", privateprefix)
     message.lineReply(prefix)
     }
   } else if (message.content.startsWith(guildPrefix + "bot-info") || message.content.startsWith(privateprefix + "bot-info")) {
@@ -786,7 +825,7 @@ client.on("message", async message => {
     }
     if (language === "english") {
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`")
+    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`\n`disbotlist.xyz`")
       if (bot) {
       if (!bot.bot) return message.lineReply("Please mention a bot not a user")
       const botid = bot.id
@@ -822,6 +861,7 @@ client.on("message", async message => {
        botembed.addField("Server Count", data.server_count, true) 
       }
       message.channel.send(botembed)
+      //top.gg
     })
       } else if (list == "discordz.xyz") {
         await fetch(`https://discordz.xyz/api/bots/${botid}`)
@@ -851,6 +891,38 @@ client.on("message", async message => {
        botembed.addField("Server Count", data.serverCount, true) 
       }
       message.channel.send(botembed)
+            //discordz.xyz
+          })
+        })
+      } else if (list == "disbotlist.xyz") {
+        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("Sorry the bot is not on disbotlist.xyz.\nPlease try again!")
+          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
+      .addField("Short Description", data.shortDesc, true)
+      .addField("Prefix", data.prefix, true)
+      .addField("Tags", data.tags, true)
+      .addField("Owners", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("Votes", data.votes, true)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](${data.invite})`)
+      if (data.support && data.support !== "") {
+        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "") {
+       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
+      }
+
+      if (data.github && data.github !== "") {
+       botembed.addField("Github", `[Click here](${data.github})`, true) 
+      }
+      message.channel.send(botembed)
+            //disbotlist.xyz
           })
         })
       }
@@ -920,6 +992,37 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
+      } else if (list == "disbotlist.xyz") {
+        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("Sorry the bot is not on disbotlist.xyz.\nPlease try again!")
+          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
+      .addField("Short Description", data.shortDesc, true)
+      .addField("Prefix", data.prefix, true)
+      .addField("Tags", data.tags, true)
+      .addField("Owners", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("Votes", data.votes, true)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](${data.invite})`)
+      if (data.support && data.support !== "") {
+        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "") {
+       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
+      }
+
+      if (data.github && data.github !== "") {
+       botembed.addField("Github", `[Click here](${data.github})`, true) 
+      }
+      message.channel.send(botembed)
+            //disbotlist.xyz
+          })
+        })
       }
     }
     } else if (language === "chinese") {
@@ -927,7 +1030,7 @@ client.on("message", async message => {
       if (!bot.bot) return message.lineReply("請mention正確的機器人\n像這樣 <@!804651902896963584>")
       const botid = bot.id
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`")
+    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`\n`disbotlist.xyz`")
       if (list == "top.gg") {
         await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
@@ -991,7 +1094,36 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
+      } else if (list == "disbotlist.xyz") {
+        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("disbotlist.xyz上\n請試試其他的機器人")
+          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
+      .addField("簡介", data.shortDesc, true)
+      .addField("前輟", data.prefix, true)
+      .addField("類別", data.tags, true)
+      .addField("擁有者", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("投票量", data.votes, true)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
+      if (data.support && data.support !== "") {
+        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
+      
       }
+
+      if (data.website && data.website !== "") {
+       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
+      }
+
+      if (data.github && data.github !== "") {
+       botembed.addField("Github", `[按這裡](${data.github})`, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
     } else {
       const botid = args.slice(1,2).join("")
       if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
@@ -1058,10 +1190,56 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
+      } else if (list == "disbotlist.xyz") {
+        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
+        .then(res => res.json())
+        .then(async data => {
+          if (data.error) return message.lineReply("disbotlist.xyz上\n請試試其他的機器人")
+          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
+            const botembed = new Discord.MessageEmbed()
+      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
+      .addField("簡介", data.shortDesc, true)
+      .addField("前輟", data.prefix, true)
+      .addField("類別", data.tags, true)
+      .addField("擁有者", data.ownerID, true)
+      .setThumbnail(`${data.avatar}`)
+      .addField("投票量", data.votes, true)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
+      if (data.support && data.support !== "") {
+        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
+      
+      }
+
+      if (data.website && data.website !== "") {
+       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
+      }
+
+      if (data.github && data.github !== "") {
+       botembed.addField("Github", `[按這裡](${data.github})`, true) 
+      }
+      message.channel.send(botembed)
+          })
+        })
+    }
+      }
       }
     }
-    }
-  } else if (message.content.startsWith(guildPrefix + "info") || message.content.startsWith(privateprefix + "info")) {
+  }
+})
+
+client.on("message", async message => {
+  if (message.author.bot) return;
+  if (!db.has(`language_${message.author.id}`)) {
+    db.set(`language_${message.author.id}`, "english")
+  }
+  let privateprefix = prefix.getPrefix(message.author.id)
+  let guildPrefix = prefix.getPrefix(message.guild.id)
+  if (!privateprefix) privateprefix = guildPrefix
+  if (!guildPrefix) guildPrefix = defaultPrefix;
+
+  let args = message.content.slice(guildPrefix.length || privateprefix.length).split(' ');
+  
+   if (message.content.startsWith(guildPrefix + "info") || message.content.startsWith(privateprefix + "info")) {
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       await fetch(`https://top.gg/api/bots/${client.user.id}`, {
@@ -1082,7 +1260,7 @@ client.on("message", async message => {
     .addField("Total Votes", data.points, true)
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
     .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("**  **", "** **", true)
+    .addField("Vote for me at", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)", true)
     .addField("Invite Link", "Invite me [here](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
     })
@@ -1105,7 +1283,7 @@ client.on("message", async message => {
     .addField("總投票", data.points, true)
     .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
     .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("**  **", "** **", true)
+    .addField("投我一票", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)", true)
     .addField("機器人邀請", "加我[這裡](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
     })
@@ -1172,17 +1350,6 @@ client.on("message", async message => {
 
     })
     }
-  } else if (message.content.startsWith(guildPrefix + "shard-status") || message.content.startsWith(privateprefix + "shard-status")) {
-    const shardc = client.ws.totalShards
-    let status = "";
-    values.forEach((value) => {
-    status += "• SHARD #"+value[0]+" | ServerCount: "+value[1]+"\n";
-    });
-    const embed = new Discord.MessageEmbed()
-    .setTitle(`${client.user.tag} shard status`)
-    .addField("SHARD COUNT", shardc)
-    .addField("SHARD STATUS", "Coming soon...")
-    message.lineReply(embed)
   } else if (message.content.startsWith(guildPrefix + "eval") || message.content.startsWith(privateprefix + "eval")) {
     owners = [`599050023669334037`]
   if (!owners.includes(message.author.id)) return message.lineReply("your not my owner you can't use this command")
@@ -1238,7 +1405,6 @@ client.on("message", async message => {
   }
   }
 })
-
 
 client.ws.on("INTERACTION_CREATE", async interaction => {
   const command = interaction.data.name.toLowerCase();
