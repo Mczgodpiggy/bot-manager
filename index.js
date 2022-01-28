@@ -1,3 +1,4 @@
+require('dotenv').config()
 const dapi = require("./discord-api.js")
 require("./webhook.js")
 const Discord = require("discord.js")
