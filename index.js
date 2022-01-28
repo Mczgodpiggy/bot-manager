@@ -79,12 +79,12 @@ client.on("message", async message => {
     let newprefix = args.slice(1, 2).join("")
     if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0") || newprefix.includes("9") || newprefix.includes("@here") || newprefix.includes("@everyone")) return message.lineReply("please give a prefix in text")
     prefix.setPrefix(newprefix, message.author.id)
-    await message.lineReply("done now prefix for you is " + "`" + newprefix + "`")
+    await message.lineReply("done now the private prefix for you is " + "`" + newprefix + "`")
     } else if (language === "chinese") {
     let newprefix = args.slice(1, 2).join("")
     if (!newprefix || newprefix.includes("1") || newprefix.includes("2") || newprefix.includes("3") || newprefix.includes("4") || newprefix.includes("5") || newprefix.includes("6") || newprefix.includes("7") || newprefix.includes("8") || newprefix.includes("9") || newprefix.includes("0") || newprefix.includes("9") || newprefix.includes("@here") || newprefix.includes("@everyone")) return message.lineReply("請給予一個前輟")
     prefix.setPrefix(newprefix, message.author.id)
-    await message.lineReply("你的新前輟是" + "`" + newprefix + "`")
+    await message.lineReply("你的新私用前輟是" + "`" + newprefix + "`")
     }
   } else if (message.content.startsWith(guildPrefix + "setprefix") || message.content.startsWith(privateprefix + "setprefix")) {
     const language = db.get(`language_${message.author.id}`)
@@ -1260,7 +1260,7 @@ client.on("message", async message => {
     .addField("Total Votes", data.points, true)
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
     .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("Vote for me at", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)", true)
+    .addField("Vote for me at", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bots/like/804651902896963584)\n[disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
     .addField("Invite Link", "Invite me [here](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
     })
@@ -1283,7 +1283,7 @@ client.on("message", async message => {
     .addField("總投票", data.points, true)
     .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
     .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("投我一票", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)", true)
+    .addField("投我一票", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)\n[disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
     .addField("機器人邀請", "加我[這裡](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
     message.lineReply(infoembed)
     })
@@ -1294,9 +1294,9 @@ client.on("message", async message => {
       
     const langembed = new Discord.MessageEmbed()
     .setTitle("Choose your language")
-      .addField("1 for", "English", true)
-      .addField("2 for", "Chinese", true)
-      .addField("** **", "cancel to cancel", true)
+      .addField("Use 1 to pick", "English", true)
+      .addField("用2選", "中文", true)
+      .addField("** **", "cancel to cancel")
     message.channel.send(langembed).then(() => {
       message.channel.awaitMessages(m => m.author.id === message.author.id, {
                     max: 1,
@@ -1324,9 +1324,9 @@ client.on("message", async message => {
       
     const langembed = new Discord.MessageEmbed()
     .setTitle("選擇你的語言")
-      .addField("用1選", "英文", true)
+      .addField("Use 1 to pick", "English", true)
       .addField("用2選", "中文", true)
-      .addField("** **", "cancel to cancel", true)
+      .addField("** **", "cancel to cancel")
     message.channel.send(langembed).then(() => {
       message.channel.awaitMessages(m => m.author.id === message.author.id, {
                     max: 1,
@@ -1361,15 +1361,32 @@ client.on("message", async message => {
   const {
     inspect
   } = require('util')
-
-  const embed = new MessageEmbed()
+  const givecode = new MessageEmbed()
+  .setTitle(`${message.author.tag} please give the code you want to eval in javascript/js format`)
+  .setDescription("You have 2 minutes to type the code")
+  .setFooter("I will wait until 2 minutes have gone by or you cancelled {by typing cacnel in chat}")
+  message.channel.send(givecode).then(() => {
+    message.channel.awaitMessages(m => m.author.id === message.author.id, {
+					max: 1,
+					time: 120000,
+					errors: ['time']
+				})
+        .then(col => {
+          const answer = col.first().content.toString()
+          const cancelled = new MessageEmbed()
+          .setTitle("Javascript code eval cancelled")
+          .setDescription("Successfully cancelled the eval")
+          .setTimestamp()
+          if (answer.startsWith("cancel") || answer.startsWith("Cancel")) return message.lineReply(cancelled)
+          if (answer.includes("client.token") || answer.includes("process.env.TOKEN")) return message.lineReply("Only noobs will allow that to be evaled")
+const embed = new MessageEmbed()
     .setFooter(msg.author.tag, msg.author.displayAvatarURL({
       dynamic: true,
       format: 'png',
       size: 4096
     }))
 
-  const query = args.slice(1).join(' ')
+  const query = answer
   const code = (lang, code) => (`\`\`\`${lang}\n${String(code).slice(0, 1000) + (code.length >= 1000 ? '...' : '')}\n\`\`\``).replace(client.token, '*'.repeat(client.token.length))
 
   if (!query) {
@@ -1403,6 +1420,8 @@ client.on("message", async message => {
       })
     }
   }
+        })
+  })
   }
 })
 
