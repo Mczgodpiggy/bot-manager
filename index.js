@@ -726,6 +726,8 @@ client.on("message", async message => {
     })
     }
       } else if (message.content.startsWith(guildPrefix + "stats") || message.content.startsWith(privateprefix + "stats")) {
+    const avgusersnf = client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c) / client.guilds.cache.size
+    const avgusers = avgusersnf.toFixed()
     const language = db.get(`language_${message.author.id}`)
     if (language === "english") {
       let addbot = new disbut.MessageButton()
@@ -740,12 +742,14 @@ client.on("message", async message => {
       .setColor("GOLD")
       .setTitle(`Server count is ${client.guilds.cache.size} servers`, '')
       .setDescription(serverlist)
-      .addField("total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
-      .addField("support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
+      .addField("Total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
+      .addField("Average users per server", avgusers)
+      .addField("Support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
       const sembed = new Discord.MessageEmbed()
       .setColor("GOLD")
       .setTitle(`Server count is ${client.guilds.cache.size} servers`, '')
       .addField("total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
+        .addField("Average users per server", avgusers)
       .addField("support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
 
       if (message.guild.id !== "855730108371042315" || message.author.id !== "599050023669334037") return message.channel.send(sembed, addbot)
@@ -1434,11 +1438,14 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
     client.guilds.cache.forEach((guild) => {
       serverlist = serverlist.concat(guild.name + "\n")
     })
+    const avgusersnf = client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c) / client.guilds.cache.size
+    const avgusers = avgusersnf.toFixed()
     const sembed = new Discord.MessageEmbed()
       .setColor("GOLD")
       .setTitle(`Server count is ${client.guilds.cache.size} servers`, '')
-      .addField("total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
-      .addField("support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
+      .addField("Total users", client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c))
+      .addField("Average users per server", avgusers)
+      .addField("Support server", "[click here](https://mczgodpiggyio.addbot.repl.co/dc)")
       client.api.interactions(interaction.id, interaction.token).callback.post({
         data: {
           type: 4,
