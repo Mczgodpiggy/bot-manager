@@ -129,7 +129,7 @@ client.on("message", async message => {
           .setThumbnail(`https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`)
           .addField("bot owner", message.author.tag)
           .addField("prefix", `${prefix}`)
-          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=8589934591&scope=bot%20applications.commands)`)
+          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=8&scope=bot%20applications.commands)`)
         message.lineReply("your bot has been submited to the queue please wait till other staffs review it")
         channel.send(`<@&${botapproverroleid}>`, { embed: botembed }
         ).then((msg) => msg.react("<a:check:850724870282674189>"))
@@ -395,7 +395,7 @@ client.on("message", async message => {
       let addbot = new disbut.MessageButton()
         .setStyle('url')
         .setLabel('add me to your servers') 
-        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands")
+        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands")
         let embed =  new Discord.MessageEmbed()
           .setTitle('help')
           .setColor('#12d8f3')
@@ -444,7 +444,7 @@ client.on("message", async message => {
       let addbot = new disbut.MessageButton()
         .setStyle('url')
         .setLabel('邀請我')
-        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands")
+        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands")
         let embed =  new Discord.MessageEmbed()
           .setTitle('指令列表')
           .setColor('#12d8f3')
@@ -808,14 +808,14 @@ client.on("message", async message => {
     if (language === "english") {
       const prefix = new Discord.MessageEmbed()
     .setTitle(`Invite me`)
-    .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+    .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8")
     .addField("my prefix for this guild is:", `${guildPrefix}`)
     if (privateprefix && privateprefix !== guildPrefix) prefix.addField("private prefix for you is:", privateprefix)
     message.lineReply(prefix)
     } else if (language === "chinese") {
       const prefix = new Discord.MessageEmbed()
     .setTitle(`邀請我`)
-    .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+    .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8")
     .addField("這個伺服器的前輟是:", `${guildPrefix}`)
     if (privateprefix && privateprefix !== guildPrefix) prefix.addField("你的私用前輟是:", privateprefix)
     message.lineReply(prefix)
@@ -882,7 +882,7 @@ client.on("message", async message => {
       .addField("Owners", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("Votes", data.votes, true)
-      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8)`)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
       
@@ -981,7 +981,7 @@ client.on("message", async message => {
       .addField("Owners", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("Votes", data.votes, true)
-      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8)`)
       if (data.support && data.support !== "null") {
         botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
       
@@ -1083,7 +1083,7 @@ client.on("message", async message => {
       .addField("擁有者", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("投票量", data.votes, true)
-      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8)`)
       if (data.support && data.support !== "null") {
         botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
       
@@ -1179,7 +1179,7 @@ client.on("message", async message => {
       .addField("擁有者", data.ownerID, true)
       .setThumbnail(`${data.avatar}`)
       .addField("投票量", data.votes, true)
-      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8589934591)`)
+      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](https://discord.com/oauth2/authorize?client_id=${botid}&scope=bot%20applications.commands&permissions=8)`)
       if (data.support && data.support !== "null") {
         botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
       
@@ -1275,7 +1275,7 @@ client.on("message", async message => {
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
     .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
     .addField("Vote for me at", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bots/like/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
-    .addField("Invite Link", "Invite me [here](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands)", true)
+    .addField("Invite Link", "Invite me [here](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
     } else if (language === "chinese") {
@@ -1307,7 +1307,7 @@ client.on("message", async message => {
     .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
     .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
     .addField("投我一票", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bot/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
-    .addField("機器人邀請", "加我[這裡](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands)", true)
+    .addField("機器人邀請", "加我[這裡](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
     }
