@@ -53,7 +53,7 @@ client.on("ready", () => {
           i = 0
           myLoop()
         }                    
-      }, 4000)
+      }, 60000)
     }
     myLoop()
 })
@@ -129,7 +129,7 @@ client.on("message", async message => {
           .setThumbnail(`https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`)
           .addField("bot owner", message.author.tag)
           .addField("prefix", `${prefix}`)
-          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${botid}&permissions=0&scope=bot%20applications.commands)`)
+          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=8589934591&scope=bot%20applications.commands)`)
         message.lineReply("your bot has been submited to the queue please wait till other staffs review it")
         channel.send(`<@&${botapproverroleid}>`, { embed: botembed }
         ).then((msg) => msg.react("<a:check:850724870282674189>"))
@@ -395,7 +395,7 @@ client.on("message", async message => {
       let addbot = new disbut.MessageButton()
         .setStyle('url')
         .setLabel('add me to your servers') 
-        .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands")
         let embed =  new Discord.MessageEmbed()
           .setTitle('help')
           .setColor('#12d8f3')
@@ -444,7 +444,7 @@ client.on("message", async message => {
       let addbot = new disbut.MessageButton()
         .setStyle('url')
         .setLabel('邀請我')
-        .setURL("https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591")
+        .setURL("https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands")
         let embed =  new Discord.MessageEmbed()
           .setTitle('指令列表')
           .setColor('#12d8f3')
@@ -830,7 +830,7 @@ client.on("message", async message => {
     }
     if (language === "english") {
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`\n`disbotlist.xyz`")
+    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`,\n`disbotlist.xyz`")
       if (bot) {
       if (!bot.bot) return message.lineReply("Please mention a bot not a user")
       const botid = bot.id
@@ -1035,7 +1035,7 @@ client.on("message", async message => {
       if (!bot.bot) return message.lineReply("請mention正確的機器人\n像這樣 <@!804651902896963584>")
       const botid = bot.id
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`\n`disbotlist.xyz`")
+    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`,\n`disbotlist.xyz`")
       if (list == "top.gg") {
         await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
@@ -1254,6 +1254,14 @@ client.on("message", async message => {
     }) 
     .then(res => res.json())
     .then(data => {
+    let totalSeconds = (client.uptime / 1000);
+    let days = Math.floor(totalSeconds / 86400);
+    totalSeconds %= 86400;
+    let hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = Math.floor(totalSeconds % 60);
+    let uptime = `Online for ${days} days, ${hours} hours, ${minutes} minutes and ${seconds} seconds`;
     const infoembed = new Discord.MessageEmbed()
     .setTitle(`**My info**`)
     .setAuthor(client.user.tag, client.user.displayAvatarURL())
@@ -1261,12 +1269,13 @@ client.on("message", async message => {
     .addField("Owner & Developer", "𝕯𝕽𝕬𝕲𝕺𝕹𝕳𝖀𝕹𝕿𝕰𝕽™®-𝔪𝔠𝔷𝔤𝔬𝔡𝔭𝔦𝔤𝔤𝔶ᴰᵉᵛ#4992", true)
     .addField("Server Count", `${client.guilds.cache.size}`, true)
     .addField("User Count", `${client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}`, true)
+      .addField("Uptime", uptime)
     .addField("Votes This Month", data.monthlyPoints, true)
     .addField("Total Votes", data.points, true)
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
     .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("Vote for me at", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bots/like/804651902896963584)\n[disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
-    .addField("Invite Link", "Invite me [here](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
+    .addField("Vote for me at", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bots/like/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
+    .addField("Invite Link", "Invite me [here](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
     } else if (language === "chinese") {
@@ -1277,6 +1286,14 @@ client.on("message", async message => {
     }) 
     .then(res => res.json())
     .then(data => {
+      let totalSeconds = (client.uptime / 1000);
+    let days = Math.floor(totalSeconds / 86400);
+    totalSeconds %= 86400;
+    let hours = Math.floor(totalSeconds / 3600);
+    totalSeconds %= 3600;
+    let minutes = Math.floor(totalSeconds / 60);
+    let seconds = Math.floor(totalSeconds % 60);
+    let uptime = `我已經連續上線了${days}天 ${hours}小時${minutes}分鐘和${seconds}秒`;
     const infoembed = new Discord.MessageEmbed()
     .setTitle(`**我的資料**`)
     .setAuthor(client.user.tag, client.user.displayAvatarURL())
@@ -1284,12 +1301,13 @@ client.on("message", async message => {
     .addField("擁有者 & 製作者", "𝕯𝕽𝕬𝕲𝕺𝕹𝕳𝖀𝕹𝕿𝕰𝕽™®-𝔪𝔠𝔷𝔤𝔬𝔡𝔭𝔦𝔤𝔤𝔶ᴰᵉᵛ#4992", true)
     .addField("伺服器量", `${client.guilds.cache.size}`, true)
     .addField("使用者數", `${client.guilds.cache.map((g) => g.memberCount).reduce((a, c) => a + c)}`, true)
+      .addField("連續上線時間", uptime)
     .addField("這個月的投票量", data.monthlyPoints, true)
     .addField("總投票", data.points, true)
     .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
     .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("投我一票", "[top.gg](https://top.gg/bot/804651902896963584)\n[discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n[consteagle.com](https://consteagle.com/bot/804651902896963584)\n[disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
-    .addField("機器人邀請", "加我[這裡](https://discord.com/oauth2/authorize?client_id=804651902896963584&scope=bot%20applications.commands&permissions=8589934591)", true)
+    .addField("投我一票", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bot/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
+    .addField("機器人邀請", "加我[這裡](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8589934591&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
     }
@@ -1301,7 +1319,7 @@ client.on("message", async message => {
     .setTitle("Choose your language")
       .addField("Use 1 to pick", "English", true)
       .addField("用2選", "中文", true)
-      .addField("** **", "cancel to cancel")
+      .addField("** **", "Type cancel or 取消 to cancel")
     message.channel.send(langembed).then(() => {
       message.channel.awaitMessages(m => m.author.id === message.author.id, {
                     max: 1,
@@ -1310,9 +1328,9 @@ client.on("message", async message => {
                 }) .then(col => {
         const answer = col.first().content.toString()
         
-        if (answer !== "1" && answer !== "2" && answer.toLowerCase() !== "cancel") return message.lineReply("please give a valid option from the list above")
+        if (answer !== "1" && answer !== "2" && answer.toLowerCase() !== "cancel" && answer !== "取消") return message.lineReply("please give a valid option from the list above")
 
-        if (answer.toLowerCase() == "cancel") return message.lineReply("language selection cancelled")
+        if (answer.toLowerCase() == "cancel" || answer == "取消") return message.lineReply("language selection cancelled")
         if (answer == "1") {
           db.set(`language_${message.author.id}`, "english")
           message.lineReply("Your language has been updated to English")
@@ -1331,7 +1349,7 @@ client.on("message", async message => {
     .setTitle("選擇你的語言")
       .addField("Use 1 to pick", "English", true)
       .addField("用2選", "中文", true)
-      .addField("** **", "cancel to cancel")
+      .addField("** **", "用取消或cancel來取消")
     message.channel.send(langembed).then(() => {
       message.channel.awaitMessages(m => m.author.id === message.author.id, {
                     max: 1,
@@ -1339,9 +1357,9 @@ client.on("message", async message => {
                     errors: ['time']
                 }) .then(col => {
         const answer = col.first().content.toString()
-        if (answer !== "1" && answer !== "2" && answer !== "cancel") return message.lineReply("請給與列表上的答案")
+        if (answer !== "1" && answer !== "2" && answer !== "cancel" && answer !== "取消") return message.lineReply("請給與列表上的答案")
 
-        if (answer == "cancel") return message.lineReply("語言更新停止")
+        if (answer == "cancel" || answer == "取消") return message.lineReply("語言更新已取消")
         if (answer == "1") {
           db.set(`language_${message.author.id}`, "english")
           message.lineReply("Your language has been updated to English")
@@ -1367,9 +1385,10 @@ client.on("message", async message => {
     inspect
   } = require('util')
   const givecode = new MessageEmbed()
+    .setAuthor(client.user.tag, client.user.displayAvatarURL())
   .setTitle(`${message.author.tag} please give the code you want to eval in javascript/js format`)
   .setDescription("You have 2 minutes to type the code")
-  .setFooter("I will wait until 2 minutes have gone by or you cancelled {by typing cacnel in chat}")
+  .setFooter("I will wait until 2 minutes have gone by or you cancelled {by typing cacnel in chat}", message.author.displayAvatarURL())
   message.channel.send(givecode).then(() => {
     message.channel.awaitMessages(m => m.author.id === message.author.id, {
 					max: 1,
@@ -1425,7 +1444,16 @@ const embed = new MessageEmbed()
       })
     }
   }
-        })
+        }).catch(err => {
+    const error = new Discord.MessageEmbed()
+    .setTitle("2 minutes have gone by time is up")
+    .setDescription("The 2 minutes timer have gone by\nPlease re-do the command")
+    .setTimestamp()
+    .setAuthor(client.user.tag, client.user.displayAvatarURL())
+    .setFooter("Time is up", message.author.displayAvatarURL())
+    message.lineReply(error)
+    console.log(err)
+  })
   })
   }
 })
@@ -1456,6 +1484,4 @@ client.ws.on("INTERACTION_CREATE", async interaction => {
       })
   }
 })
-
-
 client.login(process.env.TOKEN)

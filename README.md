@@ -13,7 +13,7 @@ steps
 ```
 very easy right?
 
-if you need any support you can always join our [support server](https://mczgodpiggyio.addbot.repl.co/dc) and create a ticket with `MCZ ticket`
+if you need any support you can always join our [support server](https://mczgodpiggyio.addbot.repl.co/dc)
 
 
 [<img src="https://user-images.githubusercontent.com/63181866/147092523-daf0567f-8b25-4684-9e1f-1f4c4784ddba.png">](http://dsc.gg/bot-manager)
