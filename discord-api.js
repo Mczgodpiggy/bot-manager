@@ -49,8 +49,40 @@ function dguildinfo(sid){
   } else if (!sid || isNaN(sid)) return "Please give a guild id"
 }
 
+function dvanity(sid){
+  if (sid && !isNaN(sid)) {
+    return fetch(`https://discord.com/api/v6/guilds/${sid}/vanity-url`, {
+      headers: {
+        authorization: `Bot ${process.env.TOKEN}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.message) return data.message
+      return data
+    })
+  } else if (!sid || isNaN(sid)) return "Please give a guild id"
+}
+
+function dinvite(sid){
+  if (sid && !isNaN(sid)) {
+    return fetch(`https://discord.com/api/v6/guilds/${sid}/invites`, {
+      headers: {
+        authorization: `Bot ${process.env.TOKEN}`
+      }
+    })
+    .then(res => res.json())
+    .then(data => {
+      if (data.message) return data.message
+      return data
+    })
+  } else if (!sid || isNaN(sid)) return "Please give a guild id"
+}
+
 module.exports = {
   duserinfo,
   dsmbinfo,
-  dguildinfo
+  dguildinfo,
+  dvanity,
+  dinvite
 }

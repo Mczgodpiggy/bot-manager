@@ -12,8 +12,6 @@ const fetch = require("node-fetch")
 const ecommands = require('./ehelp');
 const ccommands = require("./chelp")
 var defaultPrefix = 'd.';
-const disbotlist = require("disbotlist");
-const dbl = new disbotlist(process.env.DISBOTTOKEN, client);
 const { AutoPoster } = require('topgg-autoposter')
 
 const ap = AutoPoster(process.env.Topggtoken, client)
@@ -40,7 +38,7 @@ client.on("ready", () => {
     "2": `Support server: dsc.gg/dragonhunter-org`,
     "3": `Mention me for my prefix`,
     "4": `d.help for help`,
-    "5": "Made with ♥ by 𝕯𝕽𝕬𝕲𝕺𝕹𝕳𝖀𝕹𝕿𝕰𝕽™®-𝔪𝔠𝔷𝔤𝔬𝔡𝔭𝔦𝔤𝔤𝔶ᴰᵉᵛ#4992"
+    "5": "Made with ♥ by Mczgodpiggy#4992"
   }
   function myLoop() {         
     setTimeout(function() {   
@@ -129,7 +127,7 @@ client.on("message", async message => {
           .setThumbnail(`https://cdn.discordapp.com/avatars/${data.id}/${data.avatar}.png`)
           .addField("bot owner", message.author.tag)
           .addField("prefix", `${prefix}`)
-          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${bot.id}&permissions=8&scope=bot%20applications.commands)`)
+          .addField("invite", `[invite here](https://discord.com/api/oauth2/authorize?client_id=${botid}&permissions=8&scope=bot%20applications.commands)`)
         message.lineReply("your bot has been submited to the queue please wait till other staffs review it")
         channel.send(`<@&${botapproverroleid}>`, { embed: botembed }
         ).then((msg) => msg.react("<a:check:850724870282674189>"))
@@ -830,7 +828,7 @@ client.on("message", async message => {
     }
     if (language === "english") {
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.xyz`,\n`disbotlist.xyz`")
+    if (list !== "top.gg" && list !== "discordz.gg") return message.lineReply("Please select a bot list\nSupported bot lists:\n`top.gg`,\n`discordz.gg`")
       if (bot) {
       if (!bot.bot) return message.lineReply("Please mention a bot not a user")
       const botid = bot.id
@@ -868,11 +866,11 @@ client.on("message", async message => {
       message.channel.send(botembed)
       //top.gg
     })
-      } else if (list == "discordz.xyz") {
-        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+      } else if (list == "discordz.gg") {
+        await fetch(`https://discordz.gg/api/bots/${botid}`)
         .then(res => res.json())
         .then(async data => {
-          if (data.error) return message.lineReply("Sorry the bot is not on discordz.xyz.\nPlease try again!")
+          if (data.error) return message.lineReply("Sorry the bot is not on discordz.gg.\nPlease try again!")
           const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
             const botembed = new Discord.MessageEmbed()
       .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
@@ -896,38 +894,7 @@ client.on("message", async message => {
        botembed.addField("Server Count", data.serverCount, true) 
       }
       message.channel.send(botembed)
-            //discordz.xyz
-          })
-        })
-      } else if (list == "disbotlist.xyz") {
-        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.error) return message.lineReply("Sorry the bot is not on disbotlist.xyz.\nPlease try again!")
-          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
-            const botembed = new Discord.MessageEmbed()
-      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
-      .addField("Short Description", data.shortDesc, true)
-      .addField("Prefix", data.prefix, true)
-      .addField("Tags", data.tags, true)
-      .addField("Owners", data.ownerID, true)
-      .setThumbnail(`${data.avatar}`)
-      .addField("Votes", data.votes, true)
-      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](${data.invite})`)
-      if (data.support && data.support !== "") {
-        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
-      
-      }
-
-      if (data.website && data.website !== "") {
-       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
-      }
-
-      if (data.github && data.github !== "") {
-       botembed.addField("Github", `[Click here](${data.github})`, true) 
-      }
-      message.channel.send(botembed)
-            //disbotlist.xyz
+            //discordz.gg
           })
         })
       }
@@ -967,11 +934,11 @@ client.on("message", async message => {
       }
       message.channel.send(botembed)
     })
-      } else if (list == "discordz.xyz") {
-        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+      } else if (list == "discordz.gg") {
+        await fetch(`https://discordz.gg/api/bots/${botid}`)
         .then(res => res.json())
         .then(async data => {
-          if (data.error) return message.lineReply("Sorry the bot is not on discordz.xyz.\nPlease try again!")
+          if (data.error) return message.lineReply("Sorry the bot is not on discordz.gg.\nPlease try again!")
           const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
             const botembed = new Discord.MessageEmbed()
       .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
@@ -997,45 +964,12 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
-      } else if (list == "disbotlist.xyz") {
-        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.error) return message.lineReply("Sorry the bot is not on disbotlist.xyz.\nPlease try again!")
-          const botinfo = dapi.duserinfo(`${botid}`).then(botinfo => {
-            const botembed = new Discord.MessageEmbed()
-      .setTitle(`Bot info of ${botinfo.username}#${botinfo.discriminator}`)
-      .addField("Short Description", data.shortDesc, true)
-      .addField("Prefix", data.prefix, true)
-      .addField("Tags", data.tags, true)
-      .addField("Owners", data.ownerID, true)
-      .setThumbnail(`${data.avatar}`)
-      .addField("Votes", data.votes, true)
-      .addField("Invite", `Invite link for ${botinfo.username}#${botinfo.discriminator}\n[Click here](${data.invite})`)
-      if (data.support && data.support !== "") {
-        botembed.addField("Support Server", `${botinfo.username}#${botinfo.discriminator}'s support server\n[Click here](${data.support})`, true)
-      
-      }
-
-      if (data.website && data.website !== "") {
-       botembed.addField("Website", `${botinfo.username}#${botinfo.discriminator}'s website\n[Click here](${data.website})`, true) 
-      }
-
-      if (data.github && data.github !== "") {
-       botembed.addField("Github", `[Click here](${data.github})`, true) 
-      }
-      message.channel.send(botembed)
-            //disbotlist.xyz
-          })
-        })
-      }
-    }
-    } else if (language === "chinese") {
+      } else if (language === "chinese") {
       if (bot) {
       if (!bot.bot) return message.lineReply("請mention正確的機器人\n像這樣 <@!804651902896963584>")
       const botid = bot.id
       const list = args.slice(2,3).join("")
-    if (list !== "top.gg" && list !== "discordz.xyz" && list !== "disbotlist.xyz") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.xyz`,\n`disbotlist.xyz`")
+    if (list !== "top.gg" && list !== "discordz.gg") return message.lineReply("請給予一個有支援的機器人目錄\n有支援的機器人目錄:\n`top.gg`,\n`discordz.gg`")
       if (list == "top.gg") {
         await fetch(`https://top.gg/api/bots/${botid}`, {
       headers: {
@@ -1069,11 +1003,11 @@ client.on("message", async message => {
       }
       message.channel.send(botembed)
     })
-      } else if (list == "discordz.xyz") {
-        await fetch(`https://discordz.xyz/api/bots/${botid}`)
+      } else if (list == "discordz.gg") {
+        await fetch(`https://discordz.gg/api/bots/${botid}`)
         .then(res => res.json())
         .then(async data => {
-          if (data.error) return message.lineReply("那個機器人不再discordz.xyz上\n請試試其他的機器人")
+          if (data.error) return message.lineReply("那個機器人不再discordz.gg上\n請試試其他的機器人")
           const done = dapi.duserinfo(`${botid}`).then(botinfo => {
             const botembed = new Discord.MessageEmbed()
       .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
@@ -1099,77 +1033,11 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
-      } else if (list == "disbotlist.xyz") {
-        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
+      } else if (list == "discordz.gg") {
+        await fetch(`https://discordz.gg/api/bots/${botid}`)
         .then(res => res.json())
         .then(async data => {
-          if (data.error) return message.lineReply("disbotlist.xyz上\n請試試其他的機器人")
-          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
-            const botembed = new Discord.MessageEmbed()
-      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
-      .addField("簡介", data.shortDesc, true)
-      .addField("前輟", data.prefix, true)
-      .addField("類別", data.tags, true)
-      .addField("擁有者", data.ownerID, true)
-      .setThumbnail(`${data.avatar}`)
-      .addField("投票量", data.votes, true)
-      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
-      if (data.support && data.support !== "") {
-        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
-      
-      }
-
-      if (data.website && data.website !== "") {
-       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
-      }
-
-      if (data.github && data.github !== "") {
-       botembed.addField("Github", `[按這裡](${data.github})`, true) 
-      }
-      message.channel.send(botembed)
-          })
-        })
-    } else {
-      const botid = args.slice(1,2).join("")
-      if (!botid || isNaN(botid)) return message.lineReply("請給一個正確的機器人ID")
-      if (list == "top.gg") {
-        await fetch(`https://top.gg/api/bots/${botid}`, {
-      headers: {
-        authorization: process.env.Topggtoken
-      }
-    }) 
-    .then(res => res.json())
-    .then(data => {
-      if (data.error) return message.lineReply("那個機器人不再top.gg上\n請試試其他的機器人")
-      const botembed = new Discord.MessageEmbed()
-      .setTitle(`${data.username}#${data.discriminator}的資料`)
-      .addField("簡介", data.shortdesc, true)
-      .addField("前輟", data.prefix, true)
-      .addField("類別", data.tags, true)
-      .addField("擁有者 & 創作者們", data.owners, true)
-      .setThumbnail(`https://cdn.discordapp.com/avatars/${botid}/${data.defAvatar}.webp`)
-      .addField("這個月的投票量", data.monthlyPoints, true)
-      .addField("機器人邀請", `${data.username}#${data.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
-      .addField("總投票", data.points, true)
-      if (data.support && data.support !== "null") {
-        botembed.addField("機器人援助伺服器", `${data.username}#${data.discriminator}的援助伺服器\n[按這裡](https://discord.gg/${data.support})`, true)
-      
-      }
-
-      if (data.website && data.website !== "null") {
-       botembed.addField("網站", `${data.username}#${data.discriminator}的網站\n[按這裡](${data.website})`, true) 
-      }
-
-      if (data.server_count && data.server_count !== "null") {
-       botembed.addField("伺服器量", data.server_count, true) 
-      }
-      message.channel.send(botembed)
-    })
-      } else if (list == "discordz.xyz") {
-        await fetch(`https://discordz.xyz/api/bots/${botid}`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.error) return message.lineReply("那個機器人不再discordz.xyz上\n請試試其他的機器人")
+          if (data.error) return message.lineReply("那個機器人不再discordz.gg上\n請試試其他的機器人")
           const done = dapi.duserinfo(`${botid}`).then(botinfo => {
             const botembed = new Discord.MessageEmbed()
       .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
@@ -1195,37 +1063,8 @@ client.on("message", async message => {
       message.channel.send(botembed)
           })
         })
-      } else if (list == "disbotlist.xyz") {
-        await fetch(`https://disbotlist.xyz/api/bots/${botid}`)
-        .then(res => res.json())
-        .then(async data => {
-          if (data.error) return message.lineReply("disbotlist.xyz上\n請試試其他的機器人")
-          const done = dapi.duserinfo(`${botid}`).then(botinfo => {
-            const botembed = new Discord.MessageEmbed()
-      .setTitle(`${botinfo.username}#${botinfo.discriminator}的資料`)
-      .addField("簡介", data.shortDesc, true)
-      .addField("前輟", data.prefix, true)
-      .addField("類別", data.tags, true)
-      .addField("擁有者", data.ownerID, true)
-      .setThumbnail(`${data.avatar}`)
-      .addField("投票量", data.votes, true)
-      .addField("機器人邀請", `${botinfo.username}#${botinfo.discriminator}的機器人邀請\n[按這裡](${data.invite})`)
-      if (data.support && data.support !== "") {
-        botembed.addField("機器人援助伺服器", `${botinfo.username}#${botinfo.discriminator}的援助伺服器\n[按這裡](${data.support})`, true)
-      
       }
-
-      if (data.website && data.website !== "") {
-       botembed.addField("網站", `${botinfo.username}#${botinfo.discriminator}的網站\n[按這裡](${data.website})`, true) 
       }
-
-      if (data.github && data.github !== "") {
-       botembed.addField("Github", `[按這裡](${data.github})`, true) 
-      }
-      message.channel.send(botembed)
-          })
-        })
-    }
       }
       }
     }
@@ -1274,7 +1113,7 @@ client.on("message", async message => {
     .addField("Total Votes", data.points, true)
     .addField("Support Server", "Join my support server [here](https://discord.gg/vbKauQ4)", true)
     .addField("Website", "Docs [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("Vote for me at", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bots/like/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
+    .addField("Vote for me at", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.gg](https://discordz.gg/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bots/like/804651902896963584)", true)
     .addField("Invite Link", "Invite me [here](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
@@ -1306,7 +1145,7 @@ client.on("message", async message => {
     .addField("總投票", data.points, true)
     .addField("援助伺服器的邀請", "點擊[這](https://discord.gg/vbKauQ4)加入我的援助伺服器", true)
     .addField("網站", "簡介 [click here](https://mczgodpiggy.github.io/bot-manager/index.html)", true)
-    .addField("投我一票", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.xyz](https://discordz.xyz/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bot/804651902896963584)\n<:disbotlist_xyz:942249586490224650> [disbotlist.xyz](https://disbotlist.xyz/bot/804651902896963584/vote)", true)
+    .addField("投我一票", "<:top_gg:942249210181476452> [top.gg](https://top.gg/bot/804651902896963584)\n<:discordz_xyz:942250139794415726> [discordz.gg](https://discordz.gg/bot/804651902896963584)\n<:consteagle_com:942250753916022835> [consteagle.com](https://consteagle.com/bot/804651902896963584)", true)
     .addField("機器人邀請", "加我[這裡](https://discord.com/api/oauth2/authorize?client_id=804651902896963584&permissions=8&scope=bot%20applications.commands)", true)
     message.lineReply(infoembed)
     })
